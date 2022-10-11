@@ -1,0 +1,436 @@
+libkomparediff2 (4:21.08.0-1) unstable; urgency=medium
+
+  [ Norbert Preining ]
+  * New upstream release (21.08.0).
+  * Update deps from cmake.
+
+ -- Norbert Preining <norbert@preining.info>  Tue, 17 Aug 2021 12:34:41 +0900
+
+libkomparediff2 (4:21.04.0-1) experimental; urgency=medium
+
+  [ Norbert Preining ]
+  * New upstream release (21.04.0).
+  * Borrow minimal upstream signing key from k3b.
+  * Drop Kubuntu from maintainer name.
+  * Added myself to the uploaders.
+
+ -- Norbert Preining <norbert@preining.info>  Wed, 28 Apr 2021 14:12:54 +0900
+
+libkomparediff2 (4:20.12.0-2) unstable; urgency=medium
+
+  * Reupload as source-only upload so it can migrate to testing.
+
+ -- Aurélien COUDERC <coucouf@debian.org>  Fri, 25 Dec 2020 11:56:14 +0100
+
+libkomparediff2 (4:20.12.0-1) unstable; urgency=medium
+
+  * New upstream release (20.12.0).
+  * Update build dependencies according to the upstream build system:
+    - Qt >= 5.12
+    - KF5 >= 5.68
+  * Refresh copyright information.
+  * Bump Standards-Version to 4.5.1, no change required.
+  * Bump debhelper compatibility level to 13.
+  * Refresh upstream metadata.
+  * Update project homepage.
+  * Build with hardening=+all build hardening flag.
+  * Borrow minimal upstream signing key from k3b.
+  * Drop kde-l10n migration rules, not needed anymore after 2 stable releases.
+  * Install generated
+    usr/share/qlogging-categories5/libkomparediff2.categories.
+  * Removed Maximiliano Curia from the uploaders, thanks for your work
+    on the package!
+  * Added myself to the uploaders.
+
+ -- Aurélien COUDERC <coucouf@debian.org>  Fri, 25 Dec 2020 01:21:49 +0100
+
+libkomparediff2 (4:20.04.3-1) unstable; urgency=medium
+
+  * Team upload.
+  * New upstream release.
+  * Update watch file to the new release-service location.
+  * Update the build dependencies according to the upstream build system:
+    - bump cmake to 3.0
+    - bump KF packages to 5.53.0
+    - explicitly add gettext, and qtbase5-dev
+  * Update the -dev dependencies of libkomparediff2-dev:
+    - bump qtbase5-dev to 5.9.0
+    - bump KF packages to 5.53.0
+    - remove no more required: libkf5codecs-dev, libkf5coreaddons-dev,
+      libkf5i18n-dev, and libkf5kio-dev
+  * Switch from dhmk to the dh sequencer:
+    - invoke the dh sequencer using the kf5, and pkgkde_symbolshelper addons
+    - manually force the generation of the substvars for the kde-l10n breaks
+  * Bump the debhelper compatibility to 12:
+    - switch the debhelper build dependency to debhelper-compat 12
+    - remove debian/compat
+  * Add Rules-Requires-Root: no.
+  * Bump Standards-Version to 4.5.0, no changes required.
+  * Update symbols file.
+  * Add the configuration for the CI on salsa.
+  * Few changes to copyright.
+  * Remove breaks older than oldstable.
+
+ -- Pino Toscano <pino@debian.org>  Sat, 01 Aug 2020 09:25:18 +0200
+
+libkomparediff2 (4:18.08.1-1) unstable; urgency=medium
+
+  * Team upload.
+  * New upstream release.
+  * Switch Vcs-* fields to salsa.debian.org.
+  * Bump all the Frameworks build dependencies to >= 5.28.0, as indicated by
+    the upstream build system.
+  * Use https for Format in copyright.
+  * Bump the debhelper compatibility to 11:
+    - bump the debhelper build dependency to 11~
+    - bump compat to 11
+  * Bump Standards-Version to 4.2.1, no changes required.
+  * Update symbols file.
+  * Drop the 'testsuite' autopkgtest, since the test suite is run at build
+    time, and it does not test the in-archive packages.
+
+ -- Pino Toscano <pino@debian.org>  Tue, 18 Sep 2018 06:57:03 +0200
+
+libkomparediff2 (4:17.08.3-1) unstable; urgency=medium
+
+  * Team upload.
+  * Upload to unstable.
+  * New upstream release.
+  * Bump Standards-Version to 4.1.2, no changes required.
+  * Simplify watch file, and switch it to https.
+  * Add needed dependencies for libkomparediff2-dev: libkf5codecs-dev,
+    libkf5config-dev, libkf5coreaddons-dev, libkf5i18n-dev, libkf5kio-dev,
+    and libkf5xmlgui-dev.
+  * Remove unused libkf5parts-dev build dependency.
+  * Adjust l10npkgs_firstversion_ok to the version where kde-l10n will
+    drop translations.
+
+ -- Pino Toscano <pino@debian.org>  Sat, 09 Dec 2017 09:34:43 +0100
+
+libkomparediff2 (4:17.08.1-1) experimental; urgency=medium
+
+  * New upstream release (17.08.1)
+  * Bump Standards-Version to 4.1.0.
+  * Update upstream metadata
+  * Update build-deps and deps with the info from cmake
+  * Bump group breaks (16.08)
+  * Release to experimental
+
+ -- Maximiliano Curia <maxy@debian.org>  Wed, 13 Sep 2017 15:44:13 +0200
+
+libkomparediff2 (4:17.08.1-0neon) xenial; urgency=medium
+
+  * New release
+
+ -- Neon CI <neon@kde.org>  Tue, 05 Sep 2017 14:05:32 +0000
+
+libkomparediff2 (4:17.08.0-0neon) xenial; urgency=medium
+
+  * New release
+
+ -- Neon CI <neon@kde.org>  Thu, 17 Aug 2017 09:43:13 +0000
+
+libkomparediff2 (4:17.04.3-0neon) xenial; urgency=medium
+
+  * New release
+
+ -- Neon CI <neon@kde.org>  Wed, 12 Jul 2017 10:25:38 +0000
+
+libkomparediff2 (4:17.04.2-0neon) xenial; urgency=medium
+
+  * New release
+
+ -- Neon CI <neon@kde.org>  Wed, 07 Jun 2017 12:24:33 +0000
+
+libkomparediff2 (4:17.04.1-0neon) xenial; urgency=medium
+
+  * New release
+
+ -- Neon CI <neon@kde.org>  Thu, 11 May 2017 18:27:05 +0000
+
+libkomparediff2 (4:17.04.0-0neon) xenial; urgency=medium
+
+  * New release
+
+ -- Neon CI <neon@kde.org>  Wed, 19 Apr 2017 13:06:53 +0000
+
+libkomparediff2 (4:16.12.3-0neon) xenial; urgency=medium
+
+  * New release
+
+ -- Neon CI <neon@kde.org>  Wed, 08 Mar 2017 13:51:06 +0000
+
+libkomparediff2 (4:16.12.2-0neon) xenial; urgency=medium
+
+  * New release
+
+ -- Neon CI <neon@kde.org>  Wed, 08 Feb 2017 17:04:07 +0000
+
+libkomparediff2 (4:16.12.1-0neon) xenial; urgency=medium
+
+  * New release
+
+ -- Neon CI <neon@kde.org>  Wed, 11 Jan 2017 13:24:53 +0000
+
+libkomparediff2 (4:16.12.0-0neon) xenial; urgency=medium
+
+  * New release
+
+ -- Neon CI <neon@kde.org>  Wed, 14 Dec 2016 16:32:06 +0000
+
+libkomparediff2 (4:16.08.3-0neon) xenial; urgency=medium
+
+  * New release
+
+ -- Neon CI <neon@kde.org>  Mon, 21 Nov 2016 13:55:39 +0000
+
+libkomparediff2 (4:16.08.2-0neon) xenial; urgency=medium
+
+  * New release
+
+ -- Neon CI <neon@kde.org>  Fri, 14 Oct 2016 13:41:34 +0000
+
+libkomparediff2 (4:16.08.1-0neon) xenial; urgency=medium
+
+  * New release
+
+ -- Neon CI <neon@kde.org>  Fri, 16 Sep 2016 13:08:20 +0000
+
+libkomparediff2 (4:16.08.0-1) unstable; urgency=medium
+
+  * New upstream release (16.08.0)
+
+ -- Maximiliano Curia <maxy@debian.org>  Tue, 18 Oct 2016 09:49:11 +0200
+
+libkomparediff2 (4:16.08.0-0neon) xenial; urgency=medium
+
+  * New release
+
+ -- Neon CI <neon@kde.org>  Wed, 17 Aug 2016 11:50:32 +0000
+
+libkomparediff2 (4:16.04.3-0neon) xenial; urgency=medium
+
+  * New release
+
+ -- Neon CI <neon@kde.org>  Tue, 12 Jul 2016 11:36:52 +0000
+
+libkomparediff2 (4:16.04.2-0neon) xenial; urgency=medium
+
+  * New release
+
+ -- Neon CI <neon@kde.org>  Mon, 11 Jul 2016 15:03:37 +0000
+
+libkomparediff2 (4:16.04.0-1) unstable; urgency=medium
+
+  [ Automatic packaging ]
+  * Bump Standards-Version to 3.9.8
+
+  [ Maximiliano Curia ]
+  * Add upstream metadata (DEP-12)
+  * debian/control: Update Vcs-Browser and Vcs-Git fields
+
+ -- Maximiliano Curia <maxy@debian.org>  Thu, 26 May 2016 09:05:34 +0200
+
+libkomparediff2 (4:15.08.3-1) unstable; urgency=medium
+
+  * New upstream release (15.08.3).
+
+ -- Maximiliano Curia <maxy@debian.org>  Wed, 02 Dec 2015 12:40:07 +0100
+
+libkomparediff2 (4:15.08.0-1) unstable; urgency=medium
+
+  * New upstream release (15.04.0).
+  * New upstream release (15.08.0).
+
+ -- Maximiliano Curia <maxy@debian.org>  Mon, 31 Aug 2015 10:35:49 +0200
+
+libkomparediff2 (4:15.08.0-0ubuntu1) wily; urgency=medium
+
+  * new upstream release
+
+ -- Clive Johnston <clivejo@aol.com>  Wed, 26 Aug 2015 17:50:27 +0100
+
+libkomparediff2 (4:15.07.90-0ubuntu1) wily; urgency=medium
+
+  * new upstream beta release
+
+ -- Jonathan Riddell <jriddell@ubuntu.com>  Tue, 18 Aug 2015 11:26:53 +0100
+
+libkomparediff2 (4:15.04.2-0ubuntu1) wily; urgency=medium
+
+  [ Harald Sitter ]
+  * KDE Frameworks 5 port
+
+  [ Scarlett Clark ]
+  * manual merge
+  * New upstream release
+  * New upstream release
+  * Vivid backport
+
+  [ Jonathan Riddell ]
+  * New upstream release
+
+ -- Jonathan Riddell <jriddell@ubuntu.com>  Tue, 09 Jun 2015 22:30:59 +0200
+
+libkomparediff2 (4:14.12.3-0ubuntu1) vivid; urgency=medium
+
+
+  * New upstream release.
+
+ -- Scarlett Clark <sgclark@kubuntu.org>  Fri, 13 Mar 2015 13:50:52 -0700
+
+libkomparediff2 (4:14.12.2-0ubuntu1) vivid; urgency=medium
+
+  * New upstream release
+  * Remove unstable from watch file, uscan fails with
+    remote site does not even have current version
+
+ -- Scarlett Clark <sgclark@kubuntu.org>  Tue, 10 Feb 2015 08:43:27 -0800
+
+libkomparediff2 (4:14.12.0-0ubuntu1) vivid; urgency=medium
+
+  * New upstream release
+  * Remove kdelibs5-dev depend version as there was not a new release.
+
+ -- Scarlett Clark <sgclark@kubuntu.org>  Mon, 15 Dec 2014 16:10:05 +0100
+
+libkomparediff2 (4:14.11.97-0ubuntu1) vivid; urgency=medium
+
+  * New upstream RC release
+
+ -- Jonathan Riddell <jriddell@ubuntu.com>  Mon, 01 Dec 2014 18:03:50 +0100
+
+libkomparediff2 (4:4.14.2-1) unstable; urgency=medium
+
+  * New upstream release (4.14.2).
+
+ -- Maximiliano Curia <maxy@debian.org>  Mon, 20 Oct 2014 17:13:30 +0200
+
+libkomparediff2 (4:4.14.2-0ubuntu1) vivid; urgency=medium
+
+  * New upstream release
+
+ -- Scarlett Clark <sgclark@kubuntu.org>  Fri, 10 Oct 2014 06:26:09 -0700
+
+libkomparediff2 (4:4.14.1-0ubuntu1) utopic; urgency=medium
+
+  * New upstream release
+
+ -- Scarlett Clark <scarlett@scarlettgatelyclark.com>  Mon, 22 Sep 2014 17:47:40 +0200
+
+libkomparediff2 (4:4.14.0-0ubuntu1) utopic; urgency=medium
+
+  * New upstream release
+
+ -- Jonathan Riddell <jriddell@ubuntu.com>  Wed, 20 Aug 2014 13:33:07 +0200
+
+libkomparediff2 (4:4.13.97-0ubuntu1) utopic; urgency=medium
+
+  * New upstream beta release RC
+
+ -- Scarlett Clark <scarlett@scarlettgatelyclark.com>  Fri, 01 Aug 2014 17:23:05 +0200
+
+libkomparediff2 (4:4.13.95-0ubuntu1) utopic; urgency=medium
+
+  * New upstream beta release
+
+ -- Scarlett Clark <scarlett@scarlettgatelyclark.com>  Wed, 30 Jul 2014 18:47:26 +0200
+
+libkomparediff2 (4:4.13.90-0ubuntu1) utopic; urgency=medium
+
+  * New upstream beta release
+
+ -- Scarlett Clark <scarlett@scarlettgatelyclark.com>  Thu, 24 Jul 2014 23:37:10 +0200
+
+libkomparediff2 (4:4.13.2-0ubuntu1) utopic; urgency=medium
+
+  [ Rohan Garg ]
+  * Merge with debian, no changes
+
+  [ Jonathan Riddell ]
+  * new upstream release
+
+ -- Jonathan Riddell <jriddell@ubuntu.com>  Wed, 18 Jun 2014 12:07:46 +0100
+
+libkomparediff2 (4:4.13.0-0ubuntu1) trusty; urgency=medium
+
+  * New upstream KDE Software Compilation release
+
+ -- Jonathan Riddell <jriddell@ubuntu.com>  Thu, 10 Apr 2014 22:22:36 +0100
+
+libkomparediff2 (4:4.12.97-0ubuntu1) trusty; urgency=medium
+
+  * New upstream release candidate
+
+ -- Philip Muškovac <yofel@kubuntu.org>  Wed, 02 Apr 2014 11:50:00 +0200
+
+libkomparediff2 (4:4.12.95-0ubuntu1) trusty; urgency=medium
+
+  * New upstream beta release
+
+ -- Rohan Garg <rohangarg@kubuntu.org>  Sun, 23 Mar 2014 12:49:28 +0100
+
+libkomparediff2 (4:4.12.90-0ubuntu1) trusty; urgency=medium
+
+  * New upstream beta release
+
+ -- Jonathan Riddell <jriddell@ubuntu.com>  Wed, 19 Mar 2014 11:55:30 +0000
+
+libkomparediff2 (4:4.12.3-0ubuntu1) trusty; urgency=medium
+
+  * New upstream bugfix release
+
+ -- Rohan Garg <rohangarg@kubuntu.org>  Wed, 05 Mar 2014 16:32:11 +0000
+
+libkomparediff2 (4:4.12.2-2) unstable; urgency=medium
+
+  * Update package descriptions, thanks to Ansgar Burchardt.
+
+ -- Maximiliano Curia <maxy@debian.org>  Mon, 28 Apr 2014 12:25:41 +0200
+
+libkomparediff2 (4:4.12.2-1) experimental; urgency=medium
+
+  * Initial release.
+  * Bump kde-sc-dev-latest build dependency.
+
+ -- Maximiliano Curia <maxy@debian.org>  Mon, 10 Feb 2014 11:32:39 +0100
+
+libkomparediff2 (4:4.12.2-0ubuntu1) trusty; urgency=medium
+
+  * New upstream bugfix release
+
+ -- Rohan Garg <rohangarg@kubuntu.org>  Wed, 05 Feb 2014 15:09:59 +0000
+
+libkomparediff2 (4:4.12.1-0ubuntu1) trusty; urgency=low
+
+  * New upstream bugfix release
+
+ -- Rohan Garg <rohangarg@kubuntu.org>  Thu, 16 Jan 2014 08:35:37 +0000
+
+libkomparediff2 (4:4.12.0-0ubuntu1) trusty; urgency=low
+
+  * New upstream release
+
+ -- Jonathan Riddell <jriddell@ubuntu.com>  Wed, 18 Dec 2013 17:36:26 +0000
+
+libkomparediff2 (4:4.11.97-0ubuntu1) trusty; urgency=low
+
+  * New upstream RC release
+
+ -- Jonathan Riddell <jriddell@ubuntu.com>  Fri, 29 Nov 2013 13:34:31 +0000
+
+libkomparediff2 (4:4.11.95-0ubuntu1) trusty; urgency=low
+
+  * New upstream beta release
+
+ -- Rohan Garg <rohangarg@kubuntu.org>  Mon, 25 Nov 2013 18:32:01 +0100
+
+libkomparediff2 (4.11.80-0ubuntu1) trusty; urgency=low
+
+  [ Rohan Garg ]
+  * Initial release
+
+  [ Philip Muškovac ]
+  * libkomparediff2-4 breaks/replaces kompare << 4:4.11.80
+
+ -- Rohan Garg <rohangarg@kubuntu.org>  Sat, 23 Nov 2013 17:54:47 +0100

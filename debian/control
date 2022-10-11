@@ -1,0 +1,50 @@
+Source: libkomparediff2
+Section: kde
+Priority: optional
+Maintainer: Debian Qt/KDE Maintainers <debian-qt-kde@lists.debian.org>
+Uploaders: Aurélien COUDERC <coucouf@debian.org>,
+           Norbert Preining <norbert@preining.info>,
+Build-Depends: cmake (>= 3.0~),
+               debhelper-compat (= 13),
+               extra-cmake-modules (>= 5.80.0~),
+               gettext,
+               libkf5codecs-dev (>= 5.80.0~),
+               libkf5config-dev (>= 5.80.0~),
+               libkf5coreaddons-dev (>= 5.80.0~),
+               libkf5i18n-dev (>= 5.80.0~),
+               libkf5kio-dev (>= 5.80.0~),
+               libkf5xmlgui-dev (>= 5.80.0~),
+               qtbase5-dev (>= 5.15.0~),
+               pkg-kde-tools (>= 0.12),
+Standards-Version: 4.5.1
+Rules-Requires-Root: no
+Homepage: https://invent.kde.org/sdk/libkomparediff2
+Vcs-Browser: https://salsa.debian.org/qt-kde-team/kde/libkomparediff2
+Vcs-Git: https://salsa.debian.org/qt-kde-team/kde/libkomparediff2.git
+
+Package: libkomparediff2-5
+Section: libs
+Architecture: any
+Multi-Arch: same
+Depends: ${misc:Depends}, ${shlibs:Depends}
+Description: library to compare files and strings
+ This package contains a library used to compare files and strings, and is
+ used in Kompare and KDevelop.
+ .
+ This package is part of the KDE Software Development Kit module.
+
+Package: libkomparediff2-dev
+Section: libdevel
+Architecture: any
+Depends: libkomparediff2-5 (= ${binary:Version}),
+         libkf5config-dev (>= 5.80.0~),
+         libkf5xmlgui-dev (>= 5.80.0~),
+         qtbase5-dev (>= 5.15.0~),
+         ${misc:Depends},
+Description: library to compare files and strings - development files
+ This package contains a library used to compare files and strings, and is
+ used in Kompare and KDevelop.
+ .
+ This package contains development headers for the kompare library.
+ .
+ This package is part of the KDE Software Development Kit module.
