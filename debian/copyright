@@ -5,87 +5,130 @@ Source: https://invent.kde.org/sdk/libkomparediff2
 
 Files: *
 Copyright: 2011, Dmitry Risenberg <dmitry.risenberg@gmail.com>
-           1989-1991, Free Software Foundation, Inc
-           2012, Jean-Nicolas Artaud <jeannicolasartaud@gmail.com>
+           2012, Jean -Nicolas Artaud <jeannicolasartaud@gmail.com>
            2001-2003, John Firebaugh <jfirebaugh@kde.org>
            2007-2010, Kevin Kofler <kevin.kofler@chello.at>
            2001-2009, Otto Bruggeman <bruggie@gmail.com>
            2003, Otto Bruggeman <bruggie@home.nl>
            2001-2009, Otto Bruggeman <otto.bruggeman@home.nl>
-License: GPL-2+
+License: GPL-2.0-or-later
+
+Files: po/he/libkomparediff2.po
+       po/hu/libkomparediff2.po
+Copyright: 2024, Kristof Kiszel <ulysses@fsf.hu>
+           2024, Yaron Shahrabani <sh.yaron@gmail.com>
+License: GPL-2.0-or-later
+
+Files: src/KompareDiff2Config.cmake.in
+Copyright: 2008, Andreas Pakulat <apaku@gmx.de>
+           2013, Jeremy Whiting <jpwhiting@kde.org>
+           2010, Niko Sams <niko.sams@gmail.com>
+License: BSD-3-clause
+Comment: Manually collected
+
+Files: .gitlab-ci.yml
+       .kde-ci.yml
+Copyright: None
+License: CC0-1.0
 
 Files: src/differencestringpair.h
        src/marker.h
        src/stringlistpair.cpp
        src/stringlistpair.h
-       tests/*
+       tests/interactivedifftest.cpp
+       tests/interactivedifftest.h
+       tests/levenshteintest.cpp
+       tests/levenshteintest.h
 Copyright: 2011, Dmitry Risenberg <dmitry.risenberg@gmail.com>
-License: LGPL-2+
+License: LGPL-2.0-or-later
 
-Files: src/LibKompareDiff2Config.cmake.in
-Copyright: 2008, Andreas Pakulat <apaku@gmx.de>
-           2013, Jeremy Whiting <jpwhiting@kde.org>
-           2010, Niko Sams <niko.sams@gmail.com>
-License: BSD-3-clause
+Files: debian/*
+Copyright: 2024, Debian Qt/KDE Maintainers <debian-qt-kde@lists.debian.org>
+           2014, Maximiliano Curia <maxy@debian.org>
+           2013, Rohan Garg <rohangarg@kubuntu.org>
+License: GPL-2.0-or-later
+
+License: BSD-3-Clause
  Redistribution and use in source and binary forms, with or without
  modification, are permitted provided that the following conditions
  are met:
  .
- 1. Redistributions of source code must retain the copyright
+ 1. Redistributions of source code must retain the above copyright
     notice, this list of conditions and the following disclaimer.
- 2. Redistributions in binary form must reproduce the copyright
-    notice, this list of conditions and the following disclaimer in the
-    documentation and/or other materials provided with the distribution.
- 3. The name of the author may not be used to endorse or promote products
-    derived from this software without specific prior written permission.
  .
- THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
- IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
- OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
- IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
- INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
- NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
- DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
- THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
- THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ 2. Redistributions in binary form must reproduce the above copyright
+    notice, this list of conditions and the following disclaimer in
+    the documentation and/or other materials provided with the
+    distribution.
+ .
+ 3. Neither the name of the copyright holder nor the names of its
+    contributors may be used to endorse or promote products derived
+    from this software without specific prior written permission.
+ .
+ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+ FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
+ COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+ INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+ BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+ LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
+ ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ POSSIBILITY OF SUCH DAMAGE.
 
-Files: debian/*
-Copyright: 2014, Maximiliano Curia <maxy@debian.org>
-           2013, Rohan Garg <rohangarg@kubuntu.org>
-License: GPL-2+
+License: CC0-1.0
+ To the extent possible under law, the author(s) have dedicated all
+ copyright and related and neighboring rights to this software to the
+ public domain worldwide. This software is distributed without any
+ warranty.
+ .
+ You should have received a copy of the CC0 Public Domain Dedication
+ along with this software. If not, see
+ <https://creativecommons.org/publicdomain/zero/1.0/>.
+ .
+ On Debian systems, the complete text of the CC0 Public Domain
+ Dedication can be found in `/usr/share/common-licenses/CC0-1.0’.
 
-License: GPL-2+
- This package is free software; you can redistribute it and/or modify
+License: GPL-2.0-or-later
+ This program is free software; you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
  the Free Software Foundation; either version 2 of the License, or
  (at your option) any later version.
  .
- This package is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- GNU General Public License for more details.
+ This program is distributed in the hope that it will be useful, but
+ WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ General Public License for more details.
  .
  You should have received a copy of the GNU General Public License
- along with this program. If not, see <http://www.gnu.org/licenses/>
- --
- On Debian systems, the complete text of the GNU General Public License
- version 2 can be found in `/usr/share/common-licenses/GPL-2’.
-
-License: LGPL-2+
- This program is free software; you can redistribute it and/or modify it under
- the terms of the GNU Library General Public License as published by the Free
- Software Foundation; either version 2 of the License, or (at your option) any
- later version.
- .                                                          
- This program is distributed in the hope that it will be useful, but WITHOUT
- ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- FOR A PARTICULAR PURPOSE.  See the GNU Library General Public License for
- more details.
+ along with this program; if not, write to the Free Software
+ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+ 02110-1301, USA. Also add information on how to contact you by
+ electronic and paper mail.
  .
- You should have received a copy of the GNU Library General Public License
- along with this program; if not, write to the Free Software Foundation, Inc.,
- 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA .
- --
- On Debian systems, the complete text of the GNU Library General Public
- License version 2 can be found in `/usr/share/common-licenses/LGPL-2’.
+ On Debian systems, the complete text of the GNU General Public
+ License version 2 can be found in
+ `/usr/share/common-licenses/GPL-2’.
+
+License: LGPL-2.0-or-later
+ This library is free software; you can redistribute it and/or modify
+ it under the terms of the GNU Library General Public License as
+ published by the Free Software Foundation; either version 2 of the
+ License, or (at your option)  any later version.
+ .
+ This library is distributed in the hope that it will be useful, but
+ WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ Library General Public License for more details.
+ .
+ You should have received a copy of the GNU Library General Public
+ License along with this library; if not, write to the Free Software
+ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+ 02110-1301, USA.
+ .
+ On Debian systems, the complete text of the GNU Library General
+ Public License version 2 can be found in
+ `/usr/share/common-licenses/LGPL-2’.
+

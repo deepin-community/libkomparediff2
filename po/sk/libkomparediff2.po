@@ -2,79 +2,71 @@
 # Stanislav Visnovsky <visnovsky@nenya.ms.mff.cuni.cz>, 2001,2002.
 # Stanislav Visnovsky <visnovsky@kde.org>, 2004.
 # Jozef Říha <jose1711@gmail.com>, 2006.
-# Roman Paholík <wizzardsk@gmail.com>, 2012, 2013.
+# Roman Paholík <wizzardsk@gmail.com>, 2012, 2013, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: libkomparediff2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2021-07-22 01:40+0000\n"
-"PO-Revision-Date: 2013-02-24 12:58+0100\n"
+"POT-Creation-Date: 2024-07-19 00:41+0000\n"
+"PO-Revision-Date: 2022-04-09 19:27+0200\n"
 "Last-Translator: Roman Paholik <wizzardsk@gmail.com>\n"
 "Language-Team: Slovak <kde-sk@linux.sk>\n"
 "Language: sk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 1.5\n"
+"X-Generator: Lokalize 21.12.3\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 
-#: komparemodellist.cpp:58
-#, fuzzy, kde-format
-#| msgid "&Apply Difference"
+#: modellist.cpp:49
+#, kde-format
 msgctxt "@action"
 msgid "&Apply Difference"
 msgstr "&Použiť rozdiel"
 
-#: komparemodellist.cpp:62
-#, fuzzy, kde-format
-#| msgid "Un&apply Difference"
+#: modellist.cpp:53
+#, kde-format
 msgctxt "@action"
 msgid "Un&apply Difference"
 msgstr "&Vrátiť rozdiel"
 
-#: komparemodellist.cpp:66
-#, fuzzy, kde-format
-#| msgid "App&ly All"
+#: modellist.cpp:57
+#, kde-format
 msgctxt "@action"
 msgid "App&ly All"
 msgstr "P&oužiť všetky"
 
-#: komparemodellist.cpp:70
-#, fuzzy, kde-format
-#| msgid "&Unapply All"
+#: modellist.cpp:61
+#, kde-format
 msgctxt "@action"
 msgid "&Unapply All"
 msgstr "Vrá&tiť všetky zmeny"
 
-#: komparemodellist.cpp:80
-#, fuzzy, kde-format
-#| msgid "P&revious File"
+#: modellist.cpp:71
+#, kde-format
 msgctxt "@action"
 msgid "P&revious File"
-msgstr "P&redchádzajúci súbor"
+msgstr "&Predošlý súbor"
 
-#: komparemodellist.cpp:84
-#, fuzzy, kde-format
-#| msgid "N&ext File"
+#: modellist.cpp:75
+#, kde-format
 msgctxt "@action"
 msgid "N&ext File"
-msgstr "&Nasledujúci súbor"
+msgstr "&Ďalší súbor"
 
-#: komparemodellist.cpp:88
-#, fuzzy, kde-format
-#| msgid "&Previous Difference"
+#: modellist.cpp:79
+#, kde-format
 msgctxt "@action"
 msgid "&Previous Difference"
 msgstr "&Predchádzajúci rozdiel"
 
-#: komparemodellist.cpp:92
-#, fuzzy, kde-format
-#| msgid "&Next Difference"
+#: modellist.cpp:83
+#, kde-format
 msgctxt "@action"
 msgid "&Next Difference"
 msgstr "&Nasledujúci rozdiel"
 
-#: komparemodellist.cpp:253 komparemodellist.cpp:278
+#: modellist.cpp:183 modellist.cpp:209
 #, kde-format
 msgid ""
 "<qt>No models or no differences, this file: <b>%1</b>, is not a valid diff "
@@ -83,7 +75,7 @@ msgstr ""
 "<qt>Žiadne modely ani rozdiely v súbore: <b>%1</b>. Nie je to platný súbor "
 "diff.</qt>"
 
-#: komparemodellist.cpp:262
+#: modellist.cpp:192
 #, kde-format
 msgid ""
 "<qt>There were problems applying the diff <b>%1</b> to the file <b>%2</b>.</"
@@ -91,7 +83,7 @@ msgid ""
 msgstr ""
 "<qt>Nastali problémy pri použití rozdielu <b>%1</b> na súbor <b>%2</b>.</qt>"
 
-#: komparemodellist.cpp:289
+#: modellist.cpp:220
 #, kde-format
 msgid ""
 "<qt>There were problems applying the diff <b>%1</b> to the folder <b>%2</b>."
@@ -100,18 +92,18 @@ msgstr ""
 "<qt>Nastali problémy pri použití rozdielu <b>%1</b> na priečinok <b>%2</b>.</"
 "qt>"
 
-#: komparemodellist.cpp:321 komparemodellist.cpp:679
+#: modellist.cpp:256 modellist.cpp:520
 #, kde-format
 msgid "Could not open a temporary file."
 msgstr "Nepodarilo sa otvoriť dočasný súbor."
 
-#: komparemodellist.cpp:369 komparemodellist.cpp:376
+#: modellist.cpp:289 modellist.cpp:296
 #, kde-format
 msgid "<qt>Could not write to the temporary file <b>%1</b>, deleting it.</qt>"
 msgstr ""
 "<qt>Nepodaril sa zápis do dočasného súboru <b>%1</b>, súbor bol zmazaný.</qt>"
 
-#: komparemodellist.cpp:407
+#: modellist.cpp:324
 #, kde-format
 msgid ""
 "<qt>Could not create destination directory <b>%1</b>.\n"
@@ -120,7 +112,7 @@ msgstr ""
 "<qt>Nepodarilo sa vytvoriť cieľový adresár <b>%1</b>.\n"
 "Súbor nebol uložený.</qt>"
 
-#: komparemodellist.cpp:434
+#: modellist.cpp:350
 #, kde-format
 msgid ""
 "<qt>Could not upload the temporary file to the destination location <b>%1</"
@@ -131,22 +123,22 @@ msgstr ""
 "Dočasný súbor je k dispozícii pod: <b>%2</b>. Môžete ho na správne miesto "
 "skopírovať ručne.</qt>"
 
-#: komparemodellist.cpp:513 komparemodellist.cpp:626 komparemodellist.cpp:646
+#: modellist.cpp:429 modellist.cpp:465 modellist.cpp:486
 #, kde-format
 msgid "Could not parse diff output."
 msgstr "Nepodarilo sa spracovať výstup diff."
 
-#: komparemodellist.cpp:529
+#: modellist.cpp:440
 #, kde-format
 msgid "The files are identical."
 msgstr "Súbory sú rovnaké."
 
-#: komparemodellist.cpp:711
+#: modellist.cpp:550
 #, kde-format
 msgid "Could not write to the temporary file."
 msgstr "Nepodaril sa zápis do dočasného súboru."
 
-#: komparemodellist.cpp:985
+#: modellist.cpp:820
 #, kde-format
 msgid ""
 "The diff is malformed. Some lines could not be parsed and will not be "

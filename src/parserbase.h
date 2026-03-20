@@ -1,40 +1,45 @@
 /*
-SPDX-FileCopyrightText: 2002-2004 Otto Bruggeman <otto.bruggeman@home.nl>
-SPDX-FileCopyrightText: 2010 Kevin Kofler <kevin.kofler@chello.at>
+    SPDX-FileCopyrightText: 2002-2004 Otto Bruggeman <otto.bruggeman@home.nl>
+    SPDX-FileCopyrightText: 2010 Kevin Kofler <kevin.kofler@chello.at>
 
-SPDX-License-Identifier: GPL-2.0-or-later
+    SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-#ifndef DIFF2_PARSERBASE_H
-#define DIFF2_PARSERBASE_H
+#ifndef KOMPAREDIFF2_PARSERBASE_H
+#define KOMPAREDIFF2_PARSERBASE_H
 
-#include <QRegExp>
-
-#include "kompare.h"
+// lib
 #include "difference.h"
+#include "global.h"
+// Qt
+#include <QRegularExpression>
+#include <QStringList>
 
-class QStringList;
 class QString;
 
-namespace Diff2
+namespace KompareDiff2
 {
 
-class KompareModelList;
+class ModelList;
 class DiffModelList;
 class DiffModel;
 
 class ParserBase
 {
 public:
-    ParserBase(const KompareModelList* list, const QStringList& diff);
+    ParserBase(const ModelList *list, const QStringList &diff);
     virtual ~ParserBase();
 
     static QString escapePath(QString path);
     static QString unescapePath(QString path);
 
 public:
-    enum Kompare::Format format() { return determineFormat(); };
-    DiffModelList* parse(bool* malformed = nullptr);
+    Format format()
+    {
+        return determineFormat();
+    };
+
+    DiffModelList *parse(bool *malformed = nullptr);
 
 protected:
     virtual bool parseContextDiffHeader();
@@ -55,75 +60,76 @@ protected:
     virtual bool parseRCSHunkBody();
     virtual bool parseUnifiedHunkBody();
 
-    virtual DiffModelList* parseContext();
-    virtual DiffModelList* parseEd();
-    virtual DiffModelList* parseNormal();
-    virtual DiffModelList* parseRCS();
-    virtual DiffModelList* parseUnified();
+    virtual DiffModelList *parseContext();
+    virtual DiffModelList *parseEd();
+    virtual DiffModelList *parseNormal();
+    virtual DiffModelList *parseRCS();
+    virtual DiffModelList *parseUnified();
 
 protected: // Helper methods to speed things up
-    bool matchesUnifiedHunkLine(const QString& line) const;
-    void checkHeader(const QRegExp& header);
+    bool matchesUnifiedHunkLine(const QString &line) const;
+    void checkHeader(const QRegularExpression &header);
 
 protected:
     /** What is format of the diff */
-    virtual enum Kompare::Format determineFormat();
+    virtual Format determineFormat();
 
 protected:
     // Regexps for context parsing
-    QRegExp m_contextDiffHeader1;
-    QRegExp m_contextDiffHeader2;
+    QRegularExpression m_contextDiffHeader1;
+    QRegularExpression m_contextDiffHeader2;
 
-    QRegExp m_contextHunkHeader1;
-    QRegExp m_contextHunkHeader2;
-    QRegExp m_contextHunkHeader3;
+    QRegularExpression m_contextHunkHeader1;
+    QRegularExpression m_contextHunkHeader2;
+    QRegularExpression m_contextHunkHeader3;
+    QRegularExpressionMatch m_contextHunkHeader1Match;
+    QRegularExpressionMatch m_contextHunkHeader2Match;
 
-    QRegExp m_contextHunkBodyRemoved;
-    QRegExp m_contextHunkBodyAdded;
-    QRegExp m_contextHunkBodyChanged;
-    QRegExp m_contextHunkBodyContext;
-    QRegExp m_contextHunkBodyLine; // Added for convenience
+    QRegularExpression m_contextHunkBodyRemoved;
+    QRegularExpression m_contextHunkBodyAdded;
+    QRegularExpression m_contextHunkBodyChanged;
+    QRegularExpression m_contextHunkBodyContext;
+    QRegularExpression m_contextHunkBodyLine; // Added for convenience
 
     // Regexps for normal parsing
-    QRegExp m_normalDiffHeader;
+    QRegularExpression m_normalDiffHeader;
 
-    QRegExp m_normalHunkHeaderAdded;
-    QRegExp m_normalHunkHeaderRemoved;
-    QRegExp m_normalHunkHeaderChanged;
+    QRegularExpression m_normalHunkHeaderAdded;
+    QRegularExpression m_normalHunkHeaderRemoved;
+    QRegularExpression m_normalHunkHeaderChanged;
+    QRegularExpressionMatch m_normalHunkHeaderAddedMatch;
+    QRegularExpressionMatch m_normalHunkHeaderRemovedMatch;
+    QRegularExpressionMatch m_normalHunkHeaderChangedMatch;
 
-    QRegExp m_normalHunkBodyRemoved;
-    QRegExp m_normalHunkBodyAdded;
-    QRegExp m_normalHunkBodyDivider;
+    QRegularExpression m_normalHunkBodyRemoved;
+    QRegularExpression m_normalHunkBodyAdded;
+    QRegularExpression m_normalHunkBodyDivider;
 
-    enum Difference::Type m_normalDiffType;
+    Difference::Type m_normalDiffType;
 
     // RegExps for rcs parsing
-    QRegExp m_rcsDiffHeader;
+    QRegularExpression m_rcsDiffHeader;
 
     // Regexps for unified parsing
-    QRegExp m_unifiedDiffHeader1;
-    QRegExp m_unifiedDiffHeader2;
+    QRegularExpression m_unifiedDiffHeader1;
+    QRegularExpression m_unifiedDiffHeader2;
 
-    QRegExp m_unifiedHunkHeader;
-
-    QRegExp m_unifiedHunkBodyAdded;
-    QRegExp m_unifiedHunkBodyRemoved;
-    QRegExp m_unifiedHunkBodyContext;
-    QRegExp m_unifiedHunkBodyLine; // Added for convenience
+    QRegularExpression m_unifiedHunkHeader;
+    QRegularExpressionMatch m_unifiedHunkHeaderMatch;
 
 protected:
-    const QStringList&         m_diffLines;
-    DiffModel*                 m_currentModel;
-    DiffModelList*             m_models;
+    const QStringList &m_diffLines;
+    DiffModel *m_currentModel = nullptr;
+    DiffModelList *m_models = nullptr;
     QStringList::ConstIterator m_diffIterator;
 
-    bool                       m_singleFileDiff;
-    bool                       m_malformed;
+    bool m_singleFileDiff = false;
+    bool m_malformed = false;
 
 protected:
-    const KompareModelList* m_list;
+    const ModelList *m_list;
 };
 
-} // End of namespace Diff2
+} // End of namespace KompareDiff2
 
 #endif

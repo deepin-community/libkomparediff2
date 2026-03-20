@@ -1,13 +1,16 @@
-# Translation of kompare into esperanto.
+# Translation of libkomparediff2.pot to esperanto.
+# Copyright (C) 2009 Free Software Foundation, Inc.
+# This file is distributed under the same license as the libkomparediff2 package.
 # Axel Rousseau <axel@esperanto-jeunes.org>, 2009.
+# Oliver Kellogg <olivermkellogg@gmail.com>, 2023.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: kompare\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2021-07-22 01:40+0000\n"
-"PO-Revision-Date: 2009-11-15 12:06+0100\n"
-"Last-Translator: Axel Rousseau <axel@esperanto-jeunes.org>\n"
+"POT-Creation-Date: 2024-07-19 00:41+0000\n"
+"PO-Revision-Date: 2023-11-16 20:31+0100\n"
+"Last-Translator: Oliver Kellogg <olivermkellogg@gmail.com>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
 "MIME-Version: 1.0\n"
@@ -16,263 +19,130 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: pology\n"
 
-#: komparemodellist.cpp:58
+#: modellist.cpp:49
 #, kde-format
 msgctxt "@action"
 msgid "&Apply Difference"
-msgstr ""
+msgstr "&Apliki Diferencon"
 
-#: komparemodellist.cpp:62
+#: modellist.cpp:53
 #, kde-format
 msgctxt "@action"
 msgid "Un&apply Difference"
-msgstr ""
+msgstr "Mal&apliki Diferencon"
 
-#: komparemodellist.cpp:66
+#: modellist.cpp:57
 #, kde-format
 msgctxt "@action"
 msgid "App&ly All"
-msgstr ""
+msgstr "Ap&liki Ĉiujn"
 
-#: komparemodellist.cpp:70
+#: modellist.cpp:61
 #, kde-format
 msgctxt "@action"
 msgid "&Unapply All"
-msgstr ""
+msgstr "Malapliki Ĉi&ujn"
 
-#: komparemodellist.cpp:80
+#: modellist.cpp:71
 #, kde-format
 msgctxt "@action"
 msgid "P&revious File"
-msgstr ""
+msgstr "Antaŭa Dosie&ro"
 
-#: komparemodellist.cpp:84
-#, fuzzy, kde-format
-#| msgid "&File"
+#: modellist.cpp:75
+#, kde-format
 msgctxt "@action"
 msgid "N&ext File"
-msgstr "&Dosiero"
+msgstr "S&ekva Dosiero"
 
-#: komparemodellist.cpp:88
-#, fuzzy, kde-format
-#| msgid "Preferences"
+#: modellist.cpp:79
+#, kde-format
 msgctxt "@action"
 msgid "&Previous Difference"
-msgstr "Preferaĵoj"
+msgstr "&Antaŭa Diferenco"
 
-#: komparemodellist.cpp:92
+#: modellist.cpp:83
 #, kde-format
 msgctxt "@action"
 msgid "&Next Difference"
-msgstr ""
+msgstr "Sekva Difere&nco"
 
-#: komparemodellist.cpp:253 komparemodellist.cpp:278
+#: modellist.cpp:183 modellist.cpp:209
 #, kde-format
 msgid ""
 "<qt>No models or no differences, this file: <b>%1</b>, is not a valid diff "
 "file.</qt>"
 msgstr ""
+"<qt>Neniuj modeloj aŭ neniuj diferencoj, ĉi tiu dosiero: <b>%1</b>, ne estas "
+"valida diff-dosiero.</qt>"
 
-#: komparemodellist.cpp:262
+#: modellist.cpp:192
 #, kde-format
 msgid ""
 "<qt>There were problems applying the diff <b>%1</b> to the file <b>%2</b>.</"
 "qt>"
 msgstr ""
+"<qt>Estis problemoj apliki la diff-on <b>%1</b> al la dosiero <b>%2</b>.</qt>"
 
-#: komparemodellist.cpp:289
+#: modellist.cpp:220
 #, kde-format
 msgid ""
 "<qt>There were problems applying the diff <b>%1</b> to the folder <b>%2</b>."
 "</qt>"
 msgstr ""
+"<qt>Estis problemoj apliki la diff-on <b>%1</b> al la dosierujo <b>%2</b>.</"
+"qt>"
 
-#: komparemodellist.cpp:321 komparemodellist.cpp:679
+#: modellist.cpp:256 modellist.cpp:520
 #, kde-format
 msgid "Could not open a temporary file."
-msgstr ""
+msgstr "Ne eblis malfermi dumtempan dosieron."
 
-#: komparemodellist.cpp:369 komparemodellist.cpp:376
+#: modellist.cpp:289 modellist.cpp:296
 #, kde-format
 msgid "<qt>Could not write to the temporary file <b>%1</b>, deleting it.</qt>"
-msgstr ""
+msgstr "<qt>Ne eblis skribi al dumtempa dosiero <b>%1</b>, forigante ĝin.</qt>"
 
-#: komparemodellist.cpp:407
+#: modellist.cpp:324
 #, kde-format
 msgid ""
 "<qt>Could not create destination directory <b>%1</b>.\n"
 "The file has not been saved.</qt>"
 msgstr ""
+"<qt>Ne eblis krei celdosierujon <b>%1</b>.\n"
+"La dosiero ne estis konservita</qt>"
 
-#: komparemodellist.cpp:434
+#: modellist.cpp:350
 #, kde-format
 msgid ""
 "<qt>Could not upload the temporary file to the destination location <b>%1</"
 "b>. The temporary file is still available under: <b>%2</b>. You can manually "
 "copy it to the right place.</qt>"
 msgstr ""
+"<qt>Ne eblis alŝuti la provizoran dosieron al la celloko <b>%1</b>. La "
+"dumtempa dosiero ankoraŭ disponeblas sub: <b>%2</b>. Vi povas permane kopii "
+"ĝin al la ĝusta loko.</qt>"
 
-#: komparemodellist.cpp:513 komparemodellist.cpp:626 komparemodellist.cpp:646
+#: modellist.cpp:429 modellist.cpp:465 modellist.cpp:486
 #, kde-format
 msgid "Could not parse diff output."
-msgstr ""
+msgstr "Ne eblis analizi diff-eligon."
 
-#: komparemodellist.cpp:529
+#: modellist.cpp:440
 #, kde-format
 msgid "The files are identical."
-msgstr ""
+msgstr "La dosieroj estas identaj."
 
-#: komparemodellist.cpp:711
+#: modellist.cpp:550
 #, kde-format
 msgid "Could not write to the temporary file."
-msgstr ""
+msgstr "Ne eblis skribi al provizora dosiero."
 
-#: komparemodellist.cpp:985
+#: modellist.cpp:820
 #, kde-format
 msgid ""
 "The diff is malformed. Some lines could not be parsed and will not be "
 "displayed in the diff view."
 msgstr ""
-
-#~ msgctxt "NAME OF TRANSLATORS"
-#~ msgid "Your names"
-#~ msgstr "Axel Rousseau"
-
-#~ msgctxt "EMAIL OF TRANSLATORS"
-#~ msgid "Your emails"
-#~ msgstr "axel@esperanto-jeunes.org"
-
-#~ msgid "Navigation"
-#~ msgstr "Navigado"
-
-#~ msgid "Diff Output"
-#~ msgstr "Eligo de diff"
-
-#~ msgid "Source"
-#~ msgstr "Fonto"
-
-#~ msgid "Destination"
-#~ msgstr "Celo"
-
-#~ msgid "Source File"
-#~ msgstr "Fontdosiero"
-
-#~ msgid "Unknown"
-#~ msgstr "Nekonata"
-
-#~ msgid "John Firebaugh"
-#~ msgstr "John Firebaugh"
-
-#~ msgid "Author"
-#~ msgstr "Aŭtoro"
-
-#~ msgid "Otto Bruggeman"
-#~ msgstr "Otto Bruggeman"
-
-#~ msgid "Show Statistics"
-#~ msgstr "Montri la statistikojn"
-
-#~ msgid "File Exists"
-#~ msgstr "La dosiero ekzistas"
-
-#~ msgid "Overwrite"
-#~ msgstr "Anstataŭigu"
-
-#~ msgid "Kevin Kofler"
-#~ msgstr "Kevin Kofler"
-
-#~ msgid "Unified"
-#~ msgstr "Unuigita"
-
-#~ msgid "Context"
-#~ msgstr "Kunteksto"
-
-#~ msgid "RCS"
-#~ msgstr "RCS"
-
-#~ msgid "Ed"
-#~ msgstr "Ed"
-
-#~ msgid "Normal"
-#~ msgstr "Normala"
-
-#~ msgid "&Settings"
-#~ msgstr "A&gordo"
-
-#~ msgid "View"
-#~ msgstr "Vido"
-
-#~ msgid "View Settings"
-#~ msgstr "Vida agordo"
-
-#~ msgid "Options"
-#~ msgstr "Opcioj"
-
-#~ msgid "Ignore changes in case"
-#~ msgstr "Ignori ŝanĝojn de uskleco"
-
-#~ msgid "Ignore added or removed empty lines"
-#~ msgstr "Ignori aldonitajn aŭ forigitajn malplenajn liniojn"
-
-#~ msgid "Format"
-#~ msgstr "Formato"
-
-#~ msgid "Main Toolbar"
-#~ msgstr "Ĉefa ilobreto"
-
-#~ msgid "Files"
-#~ msgstr "Dosieroj"
-
-#~ msgid "Appearance"
-#~ msgstr "Aspekto"
-
-#~ msgid "Output Format"
-#~ msgstr "Eligoformato"
-
-#~ msgid "General"
-#~ msgstr "Ĝeneralo"
-
-#~ msgid "&Edit..."
-#~ msgstr "&Redakto"
-
-#~ msgid "Exclude"
-#~ msgstr "Eskludi"
-
-#~ msgid "Encoding"
-#~ msgstr "Kodoprezento"
-
-#~ msgid "Colors"
-#~ msgstr "Koloroj"
-
-#~ msgid "Number of lines:"
-#~ msgstr "Nombro de linioj:"
-
-#~ msgid "Font:"
-#~ msgstr "Tiparo:"
-
-#~ msgid "Size:"
-#~ msgstr "Grandeco:"
-
-#~ msgid "Fonts"
-#~ msgstr "Tiparoj"
-
-#~ msgid "Kompare"
-#~ msgstr "Kompare"
-
-#~ msgid "Jeff Snyder"
-#~ msgstr "Jeff Snyder"
-
-#~ msgid "Developer"
-#~ msgstr "Kreinto"
-
-#~ msgid "Maintainer"
-#~ msgstr "Prizorganto"
-
-#~ msgid "Chris Luetchford"
-#~ msgstr "Chris Luetchford"
-
-#~ msgid "Malte Starostik"
-#~ msgstr "Malte Starostik"
-
-#~ msgid "Bernd Gehrmann"
-#~ msgstr "Bernd Gehrmann"
+"La diferenco estas misformita. Kelkaj linioj ne povis esti analizitaj kaj ne "
+"estos montrataj en la diff-vido."

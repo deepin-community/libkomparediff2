@@ -1,91 +1,210 @@
 /*
-SPDX-FileCopyrightText: 2001-2004,2009 Otto Bruggeman <bruggie@gmail.com>
-SPDX-FileCopyrightText: 2001-2003 John Firebaugh <jfirebaugh@kde.org>
+    SPDX-FileCopyrightText: 2001-2004,2009 Otto Bruggeman <bruggie@gmail.com>
+    SPDX-FileCopyrightText: 2001-2003 John Firebaugh <jfirebaugh@kde.org>
 
-SPDX-License-Identifier: GPL-2.0-or-later
+    SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "difference.h"
+#include "difference_p.h"
+
+// lib
 #include "differencestringpair.h"
 #include "levenshteintable.h"
 
-using namespace Diff2;
+using namespace KompareDiff2;
 
-Difference::Difference(int sourceLineNo, int destinationLineNo, int type) :
-    QObject(),
-    m_type(type),
-    m_sourceLineNo(sourceLineNo),
-    m_destinationLineNo(destinationLineNo),
-    m_trackingDestinationLineNo(sourceLineNo),      // The whole patch starts as unapplied
-    m_applied(false),
-    m_conflicts(false),
-    m_unsaved(false)
+Difference::Difference(int sourceLineNo, int destinationLineNo, int type)
+    : d_ptr(new DifferencePrivate(sourceLineNo, destinationLineNo, type))
 {
 }
 
-Difference::~Difference()
+Difference::~Difference() = default;
+
+int Difference::type() const
 {
-    qDeleteAll(m_sourceLines);
-    qDeleteAll(m_destinationLines);
+    Q_D(const Difference);
+
+    return d->type;
+};
+
+int Difference::sourceLineNumber() const
+{
+    Q_D(const Difference);
+
+    return d->sourceLineNo;
 }
 
-void Difference::addSourceLine(QString line)
+int Difference::destinationLineNumber() const
 {
-    m_sourceLines.append(new DifferenceString(line));
+    Q_D(const Difference);
+
+    return d->destinationLineNo;
 }
 
-void Difference::addDestinationLine(QString line)
+int Difference::trackingDestinationLineNumber() const
 {
-    m_destinationLines.append(new DifferenceString(line));
+    Q_D(const Difference);
+
+    return d->trackingDestinationLineNo;
+}
+
+void Difference::setTrackingDestinationLineNumber(int i)
+{
+    Q_D(Difference);
+
+    d->trackingDestinationLineNo = i;
+}
+
+DifferenceString *Difference::sourceLineAt(int i) const
+{
+    Q_D(const Difference);
+
+    return d->sourceLines[i];
+}
+
+DifferenceString *Difference::destinationLineAt(int i) const
+{
+    Q_D(const Difference);
+
+    return d->destinationLines[i];
+}
+
+DifferenceStringList Difference::sourceLines() const
+{
+    Q_D(const Difference);
+
+    return d->sourceLines;
+}
+
+DifferenceStringList Difference::destinationLines() const
+{
+    Q_D(const Difference);
+
+    return d->destinationLines;
+}
+
+bool Difference::hasConflict() const
+{
+    Q_D(const Difference);
+
+    return d->conflicts;
+}
+
+void Difference::setConflict(bool conflicts)
+{
+    Q_D(Difference);
+
+    d->conflicts = conflicts;
+}
+
+bool Difference::isUnsaved() const
+{
+    Q_D(const Difference);
+
+    return d->unsaved;
+}
+
+void Difference::setUnsaved(bool unsaved)
+{
+    Q_D(Difference);
+
+    d->unsaved = unsaved;
+}
+
+bool Difference::applied() const
+{
+    Q_D(const Difference);
+
+    return d->applied;
+}
+
+void Difference::setType(int type)
+{
+    Q_D(Difference);
+
+    d->type = type;
+}
+
+void Difference::addSourceLine(const QString &line)
+{
+    Q_D(Difference);
+
+    d->sourceLines.append(new DifferenceString(line));
+}
+
+void Difference::addDestinationLine(const QString &line)
+{
+    Q_D(Difference);
+
+    d->destinationLines.append(new DifferenceString(line));
 }
 
 int Difference::sourceLineCount() const
 {
-    return m_sourceLines.count();
+    Q_D(const Difference);
+
+    return d->sourceLines.count();
 }
 
 int Difference::destinationLineCount() const
 {
-    return m_destinationLines.count();
+    Q_D(const Difference);
+
+    return d->destinationLines.count();
 }
 
 int Difference::sourceLineEnd() const
 {
-    return m_sourceLineNo + m_sourceLines.count();
+    Q_D(const Difference);
+
+    return d->sourceLineNo + d->sourceLines.count();
 }
 
 int Difference::destinationLineEnd() const
 {
-    return m_destinationLineNo + m_destinationLines.count();
+    Q_D(const Difference);
+
+    return d->destinationLineNo + d->destinationLines.count();
 }
 
 int Difference::trackingDestinationLineEnd() const
 {
-    return m_trackingDestinationLineNo + m_destinationLines.count();
+    Q_D(const Difference);
+
+    return d->trackingDestinationLineNo + d->destinationLines.count();
 }
 
 void Difference::apply(bool apply)
 {
-    if (apply != m_applied)
-    {
-        m_applied = apply;
-        m_unsaved = !m_unsaved;
-        Q_EMIT differenceApplied(this);
+    Q_D(Difference);
+
+    if (apply == d->applied) {
+        return;
     }
+
+    d->applied = apply;
+    d->unsaved = !d->unsaved;
+    Q_EMIT differenceApplied(this);
 }
 
 void Difference::applyQuietly(bool apply)
 {
-    if (m_applied != apply)
-    {
-        m_unsaved = !m_unsaved;
-        m_applied = apply;
+    Q_D(Difference);
+
+    if (d->applied == apply) {
+        return;
     }
+
+    d->unsaved = !d->unsaved;
+    d->applied = apply;
 }
 
 void Difference::determineInlineDifferences()
 {
-    if (m_type != Difference::Change)
+    Q_D(Difference);
+
+    if (d->type != Difference::Change)
         return;
 
     // Do nothing for now when the slc != dlc
@@ -98,11 +217,10 @@ void Difference::determineInlineDifferences()
 
     LevenshteinTable<DifferenceStringPair> table;
 
-    for (int i = 0; i < slc; ++i)
-    {
-        DifferenceString* sl = sourceLineAt(i);
-        DifferenceString* dl = destinationLineAt(i);
-        DifferenceStringPair* pair = new DifferenceStringPair(sl, dl);
+    for (int i = 0; i < slc; ++i) {
+        DifferenceString *sl = sourceLineAt(i);
+        DifferenceString *dl = destinationLineAt(i);
+        DifferenceStringPair *pair = new DifferenceStringPair(sl, dl);
 
         // return value 0 means something went wrong creating the table so don't bother finding markers
         if (table.createTable(pair) != 0)
@@ -112,16 +230,13 @@ void Difference::determineInlineDifferences()
 
 QString Difference::recreateDifference() const
 {
+    Q_D(const Difference);
+
     QString difference;
 
     // source
-    DifferenceStringListConstIterator stringIt = m_sourceLines.begin();
-    DifferenceStringListConstIterator sEnd     = m_sourceLines.end();
-
-    for (; stringIt != sEnd; ++stringIt)
-    {
-        switch (m_type)
-        {
+    for (const DifferenceString *diffString : d->sourceLines) {
+        switch (d->type) {
         case Change:
         case Delete:
             difference += QLatin1Char('-');
@@ -130,20 +245,15 @@ QString Difference::recreateDifference() const
             // Insert but this is not possible in source
             // Unchanged will be handled in destination
             // since they are the same
-//             qCDebug(LIBKOMPAREDIFF2) << "Go away, nothing to do for you in source...";
+//             qCDebug(KOMPAREDIFF2_LOG) << "Go away, nothing to do for you in source...";
             continue;
         }
-        difference += (*stringIt)->string();
+        difference += diffString->string();
     }
 
-    //destination
-    stringIt = m_destinationLines.begin();
-    sEnd     = m_destinationLines.end();
-
-    for (; stringIt != sEnd; ++stringIt)
-    {
-        switch (m_type)
-        {
+    // destination
+    for (const DifferenceString *diffString : d->destinationLines) {
+        switch (d->type) {
         case Change:
         case Insert:
             difference += QLatin1Char('+');
@@ -152,12 +262,13 @@ QString Difference::recreateDifference() const
             difference += QLatin1Char(' ');
             break;
         default: // Delete but this is not possible in destination
-//             qCDebug(LIBKOMPAREDIFF2) << "Go away, nothing to do for you in destination...";
+//             qCDebug(KOMPAREDIFF2_LOG) << "Go away, nothing to do for you in destination...";
             continue;
         }
-        difference += (*stringIt)->string();
+        difference += diffString->string();
     }
 
     return difference;
 }
 
+#include "moc_difference.cpp"

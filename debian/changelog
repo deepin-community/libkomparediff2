@@ -1,8 +1,99 @@
-libkomparediff2 (4:21.08.0-1deepin0) unstable; urgency=medium
+libkomparediff2 (4:25.04.0-1) unstable; urgency=medium
 
-  * No source change upload against GCC 12.
+  [ Aurélien COUDERC ]
+  * New upstream release (25.04.0).
+  * Bump Standards-Version to 4.7.2, no change required.
 
- -- Tianyu Chen <sweetyfish@deepin.org>  Fri, 20 Sep 2024 14:12:40 +0800
+ -- Aurélien COUDERC <coucouf@debian.org>  Thu, 17 Apr 2025 22:02:24 +0200
+
+libkomparediff2 (4:24.12.3-1) unstable; urgency=medium
+
+  * New upstream release
+  * Team upload
+
+ -- Salvo 'LtWorf' Tomaselli <ltworf@debian.org>  Fri, 07 Mar 2025 15:58:23 +0100
+
+libkomparediff2 (4:24.12.2-1) unstable; urgency=medium
+
+  * New upstream release
+  * Team upload
+
+ -- Salvo 'LtWorf' Tomaselli <ltworf@debian.org>  Sun, 02 Mar 2025 19:02:10 +0100
+
+libkomparediff2 (4:24.12.1-1) unstable; urgency=medium
+
+  * New upstream release
+  * Team upload
+
+ -- Salvo 'LtWorf' Tomaselli <ltworf@debian.org>  Tue, 21 Jan 2025 08:30:42 +0100
+
+libkomparediff2 (4:24.12.0-1) unstable; urgency=medium
+
+  [ Aurélien COUDERC ]
+  * New upstream release (24.12.0).
+  * Update build-deps and deps with the info from cmake.
+  * Fix 'acc' autopkgtest:
+    - fix location of library headers
+    - set -std=c++17, needed when using Qt 6
+  * Release to unstable.
+
+ -- Aurélien COUDERC <coucouf@debian.org>  Sun, 22 Dec 2024 09:22:07 +0100
+
+libkomparediff2 (4:24.08.2-1) experimental; urgency=medium
+
+  [ Aurélien COUDERC ]
+  * New upstream release (24.08.2).
+  * Update build-deps and deps with the info from cmake.
+  * Package new libkomparediff2-6 library package following upstream
+    soname bump.
+  * Split architecture-independent data files into a separate package
+    to ease future transitions.
+  * Bump Standards-Version to 4.7.0, no change required.
+  * Review copyright information.
+
+ -- Aurélien COUDERC <coucouf@debian.org>  Thu, 17 Oct 2024 00:10:56 +0200
+
+libkomparediff2 (4:22.12.3-1) unstable; urgency=medium
+
+  [ Aurélien COUDERC ]
+  * New upstream release (22.12.3).
+  * Update build-deps and deps with the info from cmake.
+
+ -- Aurélien COUDERC <coucouf@debian.org>  Wed, 01 Mar 2023 11:58:04 +0100
+
+libkomparediff2 (4:22.12.1-1) unstable; urgency=medium
+
+  [ Aurélien COUDERC ]
+  * New upstream release (22.12.1).
+  * Bump Standards-Version to 4.6.2, no change required.
+  * Add Albert Astals Cid’s master key to upstream signing keys.
+
+ -- Aurélien COUDERC <coucouf@debian.org>  Fri, 06 Jan 2023 23:40:32 +0100
+
+libkomparediff2 (4:22.12.0-2) unstable; urgency=medium
+
+  * Upload with a correctly released changelog.
+
+ -- Aurélien COUDERC <coucouf@debian.org>  Sat, 10 Dec 2022 16:05:00 +0100
+
+libkomparediff2 (4:22.12.0-1) unstable; urgency=medium
+
+  [ Aurélien COUDERC ]
+  * New upstream release (22.08.3).
+  * Update build-deps and deps with the info from cmake.
+  * Bump Standards-Version to 4.6.1, no change required.
+  * New upstream release (22.11.90).
+  * New upstream release (22.12.0).
+
+ -- Aurélien COUDERC <coucouf@debian.org>  Sat, 10 Dec 2022 00:13:08 +0100
+
+libkomparediff2 (4:21.12.3-1) unstable; urgency=medium
+
+  [ Aurélien COUDERC ]
+  * New upstream release (21.12.3).
+  * Bump Standards-Version to 4.6.0, no change required.
+
+ -- Aurélien COUDERC <coucouf@debian.org>  Wed, 06 Apr 2022 23:00:16 +0200
 
 libkomparediff2 (4:21.08.0-1) unstable; urgency=medium
 

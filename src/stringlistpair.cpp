@@ -1,14 +1,15 @@
 /*
-SPDX-FileCopyrightText: 2011 Dmitry Risenberg <dmitry.risenberg@gmail.com>
+    SPDX-FileCopyrightText: 2011 Dmitry Risenberg <dmitry.risenberg@gmail.com>
 
-SPDX-License-Identifier: LGPL-2.0-or-later
+    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
 #include "stringlistpair.h"
 
+// Qt
 #include <QHash>
 
-using namespace Diff2;
+using namespace KompareDiff2;
 
 unsigned int StringListPair::lengthFirst() const
 {
@@ -30,26 +31,25 @@ MarkerList StringListPair::markerListSecond() const
     return m_markersSecond;
 }
 
-void StringListPair::prependFirst(Marker* marker)
+void StringListPair::prependFirst(Marker *marker)
 {
     m_markersFirst.prepend(marker);
 }
 
-void StringListPair::prependSecond(Marker* marker)
+void StringListPair::prependSecond(Marker *marker)
 {
     m_markersSecond.prepend(marker);
 }
 
-StringListPair::StringListPair(const QStringList& first, const QStringList& second)
-    : m_first(first), m_second(second)
-{
+StringListPair::StringListPair(const QStringList &first, const QStringList &second)
+    : m_first(first)
+    , m_second(second)
     // Do not forget about 1 virtual element - see LevenshteinTable
-    m_lengthFirst = first.length() + 1;
-    m_lengthSecond = second.length() + 1;
-
-    m_hashesFirst = new unsigned int[m_lengthFirst];
-    m_hashesSecond = new unsigned int[m_lengthSecond];
-
+    , m_lengthFirst(first.length() + 1)
+    , m_lengthSecond(second.length() + 1)
+    , m_hashesFirst(m_lengthFirst)
+    , m_hashesSecond(m_lengthSecond)
+{
     m_hashesFirst[0] = qHash(QString());
     for (unsigned int i = 1; i < m_lengthFirst; ++i) {
         m_hashesFirst[i] = qHash(first[i - 1]);
@@ -60,11 +60,7 @@ StringListPair::StringListPair(const QStringList& first, const QStringList& seco
     }
 }
 
-StringListPair::~StringListPair()
-{
-    delete[] m_hashesFirst;
-    delete[] m_hashesSecond;
-}
+StringListPair::~StringListPair() = default;
 
 bool StringListPair::equal(unsigned int firstIndex, unsigned int secondIndex) const
 {

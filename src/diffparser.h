@@ -1,27 +1,28 @@
 /*
-SPDX-FileCopyrightText: 2002-2004 Otto Bruggeman <otto.bruggeman@home.nl>
+    SPDX-FileCopyrightText: 2002-2004 Otto Bruggeman <otto.bruggeman@home.nl>
 
-SPDX-License-Identifier: GPL-2.0-or-later
+    SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-#ifndef DIFFPARSER_H
-#define DIFFPARSER_H
+#ifndef KOMPAREDIFF2_DIFFPARSER_H
+#define KOMPAREDIFF2_DIFFPARSER_H
 
+// lib
 #include "parserbase.h"
 
-namespace Diff2
+namespace KompareDiff2
 {
 
 class DiffParser : public ParserBase
 {
 public:
-    DiffParser(const KompareModelList* list, const QStringList& diff);
+    DiffParser(const ModelList *list, const QStringList &diff);
     ~DiffParser() override;
 
 protected:
-    enum Kompare::Format determineFormat() override;
+    Format determineFormat() override;
 };
 
-} // End of namespace Diff2
+} // End of namespace KompareDiff2
 
 #endif
