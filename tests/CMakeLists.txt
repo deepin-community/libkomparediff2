@@ -14,8 +14,8 @@ include_directories(
 )
 
 ecm_qt_declare_logging_category(komparediff2_DBG_SRCS
-    HEADER komparediffdebug.h
-    IDENTIFIER LIBKOMPAREDIFF2
+    HEADER komparediff2_logging.h
+    IDENTIFIER KOMPAREDIFF2_LOG
     CATEGORY_NAME "libkomparediff"
 )
 
@@ -26,43 +26,59 @@ target_sources(interactiveDiffTest PRIVATE
     ${LIB_SOURCE_DIR}/perforceparser.cpp
     ${LIB_SOURCE_DIR}/cvsdiffparser.cpp
     ${LIB_SOURCE_DIR}/difference.cpp
+    ${LIB_SOURCE_DIR}/differencestring.cpp
     ${LIB_SOURCE_DIR}/diffhunk.cpp
     ${LIB_SOURCE_DIR}/diffmodel.cpp
+    ${LIB_SOURCE_DIR}/diffmodel_p.cpp
     ${LIB_SOURCE_DIR}/diffmodellist.cpp
     ${LIB_SOURCE_DIR}/diffparser.cpp
-    ${LIB_SOURCE_DIR}/komparemodellist.cpp
+    ${LIB_SOURCE_DIR}/info.cpp
+    ${LIB_SOURCE_DIR}/modellist.cpp
+    ${LIB_SOURCE_DIR}/modellist_p.cpp
     ${LIB_SOURCE_DIR}/kompareprocess.cpp
     ${LIB_SOURCE_DIR}/parser.cpp
     ${LIB_SOURCE_DIR}/parserbase.cpp
     ${LIB_SOURCE_DIR}/stringlistpair.cpp
-    ${LIB_SOURCE_DIR}/kompare.cpp
     ${komparediff2_DBG_SRCS}
 )
 
 add_test(NAME libkomparediff2-interactiveDiffTest COMMAND interactiveDiffTest)
 ecm_mark_as_test(interactiveDiffTest)
-set_target_properties(interactiveDiffTest PROPERTIES COMPILE_FLAGS "-DDIFF2_EXPORT=")
+# Configure export macros to be setup as with a static lib
+# as the source files are reused for the tests.
+# Saves doing a separate export header.
+target_compile_definitions(interactiveDiffTest
+  PUBLIC
+    KOMPAREDIFF2_STATIC_DEFINE
+)
 target_link_libraries(interactiveDiffTest
-    Qt5::Core
-    Qt5::Test
-    KF5::CoreAddons
-    KF5::I18n
-    KF5::XmlGui
-    KF5::KIOCore
+    Qt6::Core
+    Qt6::Test
+    KF6::CoreAddons
+    KF6::I18n
+    KF6::XmlGui
+    KF6::KIOCore
 )
 
 add_executable(levenshteintest)
 target_sources(levenshteintest PRIVATE
     levenshteintest.cpp
     ${LIB_SOURCE_DIR}/difference.cpp
+    ${LIB_SOURCE_DIR}/differencestring.cpp
     ${LIB_SOURCE_DIR}/stringlistpair.cpp
     ${komparediff2_DBG_SRCS}
 )
 
 add_test(NAME libkomparediff2-levenshteintest COMMAND levenshteintest)
 ecm_mark_as_test(levenshteintest)
-set_target_properties(levenshteintest PROPERTIES COMPILE_FLAGS "-DDIFF2_EXPORT=")
+# Configure export macros to be setup as with a static lib
+# as the source files are reused for the tests.
+# Saves doing a separate export header.
+target_compile_definitions(levenshteintest
+  PUBLIC
+    KOMPAREDIFF2_STATIC_DEFINE
+)
 target_link_libraries(levenshteintest
-    Qt5::Test
-    Qt5::Core
+    Qt6::Test
+    Qt6::Core
 )

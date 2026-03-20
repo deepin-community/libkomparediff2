@@ -4,147 +4,146 @@
 # Ahmad M. Zawawi <azawawi@emirates.net.ae>, 2004.
 # Youssef Chahibi <chahibi@gmail.com>, 2007.
 # Abdalrahim Fakhouri <abdilra7eem@yahoo.com>, 2012.
+# SPDX-FileCopyrightText: 2022, 2024 Zayed Al-Saidi <zayed.alsaidi@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kompare\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2021-07-22 01:40+0000\n"
-"PO-Revision-Date: 2012-02-09 17:29+0200\n"
-"Last-Translator: Abdalrahim Fakhouri <abdilra7eem@yahoo.com>\n"
-"Language-Team: Arabic <doc@arabeyes.org>\n"
+"POT-Creation-Date: 2024-07-19 00:41+0000\n"
+"PO-Revision-Date: 2024-12-19 07:29+0400\n"
+"Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
+"Language-Team: ar\n"
 "Language: ar\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
 "&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
-"X-Generator: Lokalize 1.2\n"
+"X-Generator: Lokalize 23.08.5\n"
 
-#: komparemodellist.cpp:58
-#, fuzzy, kde-format
-#| msgid "&Apply Difference"
+#: modellist.cpp:49
+#, kde-format
 msgctxt "@action"
 msgid "&Apply Difference"
-msgstr "تطبيق الاختلاف"
+msgstr "&طبّق الاختلاف"
 
-#: komparemodellist.cpp:62
-#, fuzzy, kde-format
-#| msgid "Un&apply Difference"
+#: modellist.cpp:53
+#, kde-format
 msgctxt "@action"
 msgid "Un&apply Difference"
-msgstr "إلغاء تطبيق الاختلاف"
+msgstr "ألغ &تطبيق الاختلاف"
 
-#: komparemodellist.cpp:66
-#, fuzzy, kde-format
-#| msgid "App&ly All"
+#: modellist.cpp:57
+#, kde-format
 msgctxt "@action"
 msgid "App&ly All"
-msgstr "تطبيق الكل"
+msgstr "طبّق ال&كل"
 
-#: komparemodellist.cpp:70
-#, fuzzy, kde-format
-#| msgid "&Unapply All"
+#: modellist.cpp:61
+#, kde-format
 msgctxt "@action"
 msgid "&Unapply All"
-msgstr "إ&لغ كل التطبيقات"
+msgstr "أل&غ تطبيق الكل"
 
-#: komparemodellist.cpp:80
-#, fuzzy, kde-format
-#| msgid "P&revious File"
+#: modellist.cpp:71
+#, kde-format
 msgctxt "@action"
 msgid "P&revious File"
-msgstr "الملف السابق"
+msgstr "الملف ال&سابق"
 
-#: komparemodellist.cpp:84
-#, fuzzy, kde-format
-#| msgid "N&ext File"
+#: modellist.cpp:75
+#, kde-format
 msgctxt "@action"
 msgid "N&ext File"
-msgstr "الملف التالي"
+msgstr "الملف ال&تالي"
 
-#: komparemodellist.cpp:88
-#, fuzzy, kde-format
-#| msgid "&Previous Difference"
+#: modellist.cpp:79
+#, kde-format
 msgctxt "@action"
 msgid "&Previous Difference"
-msgstr "التغيّر السابق"
+msgstr "ال&تغيّر السابق"
 
-#: komparemodellist.cpp:92
-#, fuzzy, kde-format
-#| msgid "&Next Difference"
+#: modellist.cpp:83
+#, kde-format
 msgctxt "@action"
 msgid "&Next Difference"
-msgstr "التغيّّر التالي"
+msgstr "التغيّّر التال&ي"
 
-#: komparemodellist.cpp:253 komparemodellist.cpp:278
-#, fuzzy, kde-format
+#: modellist.cpp:183 modellist.cpp:209
+#, kde-format
 msgid ""
 "<qt>No models or no differences, this file: <b>%1</b>, is not a valid diff "
 "file.</qt>"
-msgstr "<qt> لا أو لا ملفّ<b></b> هو ليس a سليم ملفّ</qt>"
+msgstr ""
+"<qt>لا يوجد نماذج أو اختلافات، هذا الملف: <b>%1</b>، ليس ملف اختلاف صالحًا.</"
+"qt>"
 
-#: komparemodellist.cpp:262
-#, fuzzy, kde-format
+#: modellist.cpp:192
+#, kde-format
 msgid ""
 "<qt>There were problems applying the diff <b>%1</b> to the file <b>%2</b>.</"
 "qt>"
-msgstr "<qt> هناك<b></b> إلى ملفّ<b></b></qt>"
+msgstr ""
+"<qt>كانت هناك مشاكل أثناء تطبيق الاختلاف <b>%1</b> على الملف <b>%2</b>.</qt>"
 
-#: komparemodellist.cpp:289
-#, fuzzy, kde-format
+#: modellist.cpp:220
+#, kde-format
 msgid ""
 "<qt>There were problems applying the diff <b>%1</b> to the folder <b>%2</b>."
 "</qt>"
-msgstr "<qt> هناك<b></b> إلى مجلد<b></b></qt>"
+msgstr ""
+"<qt>كانت هناك مشاكل في تطبيق الاختلاف <b>%1</b> على المجلد <b>%2</b>.</qt>"
 
-#: komparemodellist.cpp:321 komparemodellist.cpp:679
+#: modellist.cpp:256 modellist.cpp:520
 #, kde-format
 msgid "Could not open a temporary file."
 msgstr "فشل فتح ملف مؤقَت."
 
-#: komparemodellist.cpp:369 komparemodellist.cpp:376
-#, fuzzy, kde-format
+#: modellist.cpp:289 modellist.cpp:296
+#, kde-format
 msgid "<qt>Could not write to the temporary file <b>%1</b>, deleting it.</qt>"
-msgstr "<qt> يمكن أن ليس كتابة إلى مؤقت ملفّ<b></b> الإيطالية</qt>"
+msgstr "<qt>لم يتمكن من الكتابة إلى الملف المؤقت <b>%1</b>، لذا حُذف.</qt>"
 
-#: komparemodellist.cpp:407
-#, fuzzy, kde-format
+#: modellist.cpp:324
+#, kde-format
 msgid ""
 "<qt>Could not create destination directory <b>%1</b>.\n"
 "The file has not been saved.</qt>"
-msgstr "<qt> يمكن أن ليس إ_نشئ مقصد دليل<b></b> ملفّ ليس</qt>"
+msgstr ""
+"<qt>لم يتمكن من إنشاء دليل الوجهة <b>%1</b>.\n"
+"لم يحفظ الملف.</qt>"
 
-#: komparemodellist.cpp:434
-#, fuzzy, kde-format
+#: modellist.cpp:350
+#, kde-format
 msgid ""
 "<qt>Could not upload the temporary file to the destination location <b>%1</"
 "b>. The temporary file is still available under: <b>%2</b>. You can manually "
 "copy it to the right place.</qt>"
 msgstr ""
-"<qt> يمكن أن ليس ارفع مؤقت ملفّ إلى مقصد موقع<b></b> الـ مؤقت ملفّ هو "
-"متوفّر<b></b> أنت يدويّاً نسخ الإيطالية إلى يمين</qt>"
+"<qt>لم نتمكن من تحميل الملف المؤقت إلى موقع الوجهة <b>%1</b>. لا يزال الملف "
+"المؤقت متاحًا ضمن: <b>%2</b>. يمكنك نسخه يدويًا إلى المكان الصحيح.</qt>"
 
-#: komparemodellist.cpp:513 komparemodellist.cpp:626 komparemodellist.cpp:646
+#: modellist.cpp:429 modellist.cpp:465 modellist.cpp:486
 #, kde-format
 msgid "Could not parse diff output."
 msgstr "فشل إعراب مخرجات الإختلافات."
 
-#: komparemodellist.cpp:529
+#: modellist.cpp:440
 #, kde-format
 msgid "The files are identical."
 msgstr "هذه الملفات متطابقة."
 
-#: komparemodellist.cpp:711
+#: modellist.cpp:550
 #, kde-format
 msgid "Could not write to the temporary file."
 msgstr "فشل الكتابة إلى الملف المؤقَت."
 
-#: komparemodellist.cpp:985
+#: modellist.cpp:820
 #, kde-format
 msgid ""
 "The diff is malformed. Some lines could not be parsed and will not be "
 "displayed in the diff view."
-msgstr ""
+msgstr "تم تشويه الفرق. لم يتم تحليل بعض الأسطر ولن يتم عرضها في عرض الاختلاف."
 
 #~ msgctxt "NAME OF TRANSLATORS"
 #~ msgid "Your names"
@@ -628,7 +627,7 @@ msgstr ""
 #~ "that is used most frequently because it is very readable. The KDE "
 #~ "developers like this format the best so use it for sending patches."
 #~ msgstr ""
-#~ "انتقِ تنسيق من مخرجات أداء موحّد هو هو مُستخدَم الإيطالية هو مقروء الـ كدي "
+#~ "انتقِ تنسيق من مخرجات أداء موحّد هو هو مُستخدَم الإيطالية هو مقروء الـ كِيدِي "
 #~ "مثل تنسيق استخدام الإيطالية لـ."
 
 #~ msgid "Output Format"

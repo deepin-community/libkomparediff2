@@ -1,21 +1,22 @@
 /*
-SPDX-FileCopyrightText: 2002-2004 Otto Bruggeman <otto.bruggeman@home.nl>
+    SPDX-FileCopyrightText: 2002-2004 Otto Bruggeman <otto.bruggeman@home.nl>
 
-SPDX-License-Identifier: GPL-2.0-or-later
+    SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-#ifndef PERFORCE_PARSER_H
-#define PERFORCE_PARSER_H
+#ifndef KOMPAREDIFF2_PERFORCEPARSER_H
+#define KOMPAREDIFF2_PERFORCEPARSER_H
 
+// lib
 #include "parserbase.h"
 
-namespace Diff2
+namespace KompareDiff2
 {
 
 class PerforceParser : public ParserBase
 {
 public:
-    PerforceParser(const KompareModelList* list, const QStringList& diff);
+    PerforceParser(const ModelList *list, const QStringList &diff);
     ~PerforceParser() override;
 
 protected:
@@ -25,9 +26,9 @@ protected:
     bool parseUnifiedDiffHeader() override;
 
 protected:
-    enum Kompare::Format determineFormat() override;
+    Format determineFormat() override;
 };
 
-} // End of namespace Diff2
+} // End of namespace KompareDiff2
 
 #endif

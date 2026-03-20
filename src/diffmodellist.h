@@ -1,44 +1,49 @@
 /*
-SPDX-FileCopyrightText: 2004-2005, 2009 Otto Bruggeman <bruggie@gmail.com>
+    SPDX-FileCopyrightText: 2004-2005, 2009 Otto Bruggeman <bruggie@gmail.com>
 
-SPDX-License-Identifier: GPL-2.0-or-later
+    SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-#ifndef DIFFMODELLIST_H
-#define DIFFMODELLIST_H
+#ifndef KOMPAREDIFF2_DIFFMODELLIST_H
+#define KOMPAREDIFF2_DIFFMODELLIST_H
 
-#include <QList> // include for the base class
-
+// lib
 #include "diffmodel.h"
-#include "diff2_export.h"
+#include "komparediff2_export.h"
+// Qt
+#include <QList>
 
 /**
- * Diff2 namespace
+ * KompareDiff2 namespace
  */
-namespace Diff2
+namespace KompareDiff2
 {
 
-using DiffModelListIterator =      QList<DiffModel*>::iterator;
-using DiffModelListConstIterator = QList<DiffModel*>::const_iterator;
-
 /**
+ * @class DiffModelList diffmodellist.h <KompareDiff2/DiffModelList>
+ *
  * A list of DiffModel.
  */
-class DIFF2_EXPORT DiffModelList : public QList<DiffModel*>
+class KOMPAREDIFF2_EXPORT DiffModelList : public QList<DiffModel *>
 {
 public:
-    DiffModelList() {}
-    DiffModelList(const DiffModelList& list) : QList<DiffModel*>(list) {}
+    DiffModelList() = default;
+    DiffModelList(const DiffModelList &list)
+        : QList<DiffModel *>(list)
+    {
+    }
     virtual ~DiffModelList()
     {
         qDeleteAll(begin(), end());
     }
 
 public:
-    virtual void sort();
+    void sort();
+};
 
-}; // End of class DiffModelList
+using DiffModelListIterator =      QList<DiffModel *>::iterator;
+using DiffModelListConstIterator = QList<DiffModel *>::const_iterator;
 
-} // End of Namespace Diff2
+} // End of Namespace KompareDiff2
 
-#endif // DIFFMODELLIST_H
+#endif // KOMPAREDIFF2_DIFFMODELLIST_H

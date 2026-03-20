@@ -1,22 +1,23 @@
 /*
-SPDX-FileCopyrightText: 2002-2004,2009 Otto Bruggeman <bruggie@gmail.com>
-SPDX-FileCopyrightText: 2007,2010 Kevin Kofler  <kevin.kofler@chello.at>
+    SPDX-FileCopyrightText: 2002-2004,2009 Otto Bruggeman <bruggie@gmail.com>
+    SPDX-FileCopyrightText: 2007,2010 Kevin Kofler  <kevin.kofler@chello.at>
 
-SPDX-License-Identifier: GPL-2.0-or-later
+    SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "parserbase.h"
 
+// lib
+#include "difference.h"
+#include "diffhunk.h"
+#include "diffmodel.h"
+#include "diffmodellist.h"
+#include "modellist.h"
+#include <komparediff2_logging.h>
+// Qt
 #include <QObject>
 
-#include <komparediffdebug.h>
-#include "diffmodellist.h"
-#include "diffmodel.h"
-#include "diffhunk.h"
-#include "difference.h"
-#include "komparemodellist.h"
-
-using namespace Diff2;
+using namespace KompareDiff2;
 
 // static
 QString ParserBase::unescapePath(QString path)
@@ -54,49 +55,41 @@ QString ParserBase::escapePath(QString path)
     return path;
 }
 
-ParserBase::ParserBase(const KompareModelList* list, const QStringList& diff) :
-    m_diffLines(diff),
-    m_currentModel(nullptr),
-    m_models(nullptr),
-    m_diffIterator(m_diffLines.begin()),
-    m_singleFileDiff(false),
-    m_malformed(false),
-    m_list(list)
+ParserBase::ParserBase(const ModelList *list, const QStringList &diff)
+    : m_diffLines(diff)
+    , m_diffIterator(m_diffLines.begin())
+    , m_list(list)
 {
-//     qCDebug(LIBKOMPAREDIFF2) << diff;
-//     qCDebug(LIBKOMPAREDIFF2) << m_diffLines;
+//     qCDebug(KOMPAREDIFF2_LOG) << diff;
+//     qCDebug(KOMPAREDIFF2_LOG) << m_diffLines;
     m_models = new DiffModelList();
 
     // used in contexthunkheader
-    m_contextHunkHeader1.setPattern(QStringLiteral("\\*{15} ?(.*)\\n"));  // capture is for function name
-    m_contextHunkHeader2.setPattern(QStringLiteral("\\*\\*\\* ([0-9]+),([0-9]+) \\*\\*\\*\\*.*\\n"));
+    m_contextHunkHeader1.setPattern(QRegularExpression::anchoredPattern(QStringLiteral("\\*{15} ?(.*)\\n"))); // capture is for function name
+    m_contextHunkHeader2.setPattern(QRegularExpression::anchoredPattern(QStringLiteral("\\*\\*\\* ([0-9]+),([0-9]+) \\*\\*\\*\\*.*\\n")));
     // used in contexthunkbody
-    m_contextHunkHeader3.setPattern(QStringLiteral("--- ([0-9]+),([0-9]+) ----\\n"));
+    m_contextHunkHeader3.setPattern(QRegularExpression::anchoredPattern(QStringLiteral("--- ([0-9]+),([0-9]+) ----\\n")));
 
-    m_contextHunkBodyRemoved.setPattern(QStringLiteral("- (.*)"));
-    m_contextHunkBodyAdded.setPattern(QStringLiteral("\\+ (.*)"));
-    m_contextHunkBodyChanged.setPattern(QStringLiteral("! (.*)"));
-    m_contextHunkBodyContext.setPattern(QStringLiteral("  (.*)"));
-    m_contextHunkBodyLine.setPattern(QStringLiteral("[-\\+! ] (.*)"));
+    m_contextHunkBodyRemoved.setPattern(QRegularExpression::anchoredPattern(QStringLiteral("- (.*)\\n")));
+    m_contextHunkBodyAdded.setPattern(QRegularExpression::anchoredPattern(QStringLiteral("\\+ (.*)\\n")));
+    m_contextHunkBodyChanged.setPattern(QRegularExpression::anchoredPattern(QStringLiteral("! (.*)\\n")));
+    m_contextHunkBodyContext.setPattern(QRegularExpression::anchoredPattern(QStringLiteral("  (.*)\\n")));
+    m_contextHunkBodyLine.setPattern(QRegularExpression::anchoredPattern(QStringLiteral("[-\\+! ] (.*)\\n")));
 
     // This regexp sucks... i'll see what happens
-    m_normalDiffHeader.setPattern(QStringLiteral("diff (?:(?:-|--)[a-zA-Z0-9=\\\"]+ )*(?:|-- +)(.*) +(.*)\\n"));
+    m_normalDiffHeader.setPattern(QRegularExpression::anchoredPattern(QStringLiteral("diff (?:(?:-|--)[a-zA-Z0-9=\\\"]+ )*(?:|-- +)(.*) +(.*)\\n")));
 
-    m_normalHunkHeaderAdded.setPattern(QStringLiteral("([0-9]+)a([0-9]+)(|,[0-9]+)(.*)\\n"));
-    m_normalHunkHeaderRemoved.setPattern(QStringLiteral("([0-9]+)(|,[0-9]+)d([0-9]+)(.*)\\n"));
-    m_normalHunkHeaderChanged.setPattern(QStringLiteral("([0-9]+)(|,[0-9]+)c([0-9]+)(|,[0-9]+)(.*)\\n"));
+    m_normalHunkHeaderAdded.setPattern(QRegularExpression::anchoredPattern(QStringLiteral("([0-9]+)a([0-9]+)(|,[0-9]+)(.*)\\n")));
+    m_normalHunkHeaderRemoved.setPattern(QRegularExpression::anchoredPattern(QStringLiteral("([0-9]+)(|,[0-9]+)d([0-9]+)(.*)\\n")));
+    m_normalHunkHeaderChanged.setPattern(QRegularExpression::anchoredPattern(QStringLiteral("([0-9]+)(|,[0-9]+)c([0-9]+)(|,[0-9]+)(.*)\\n")));
 
-    m_normalHunkBodyRemoved.setPattern(QStringLiteral("< (.*)"));
-    m_normalHunkBodyAdded.setPattern(QStringLiteral("> (.*)"));
-    m_normalHunkBodyDivider.setPattern(QStringLiteral("---\\n"));
+    m_normalHunkBodyRemoved.setPattern(QRegularExpression::anchoredPattern(QStringLiteral("< (.*)\\n")));
+    m_normalHunkBodyAdded.setPattern(QRegularExpression::anchoredPattern(QStringLiteral("> (.*)\\n")));
+    m_normalHunkBodyDivider.setPattern(QRegularExpression::anchoredPattern(QStringLiteral("---\\n")));
 
-    m_unifiedDiffHeader1.setPattern(QStringLiteral("--- ([^\\t]+)(?:\\t([^\\t]+)(?:\\t?)(.*))?\\n"));
-    m_unifiedDiffHeader2.setPattern(QStringLiteral("\\+\\+\\+ ([^\\t]+)(?:\\t([^\\t]+)(?:\\t?)(.*))?\\n"));
-    m_unifiedHunkHeader.setPattern(QStringLiteral("@@ -([0-9]+)(|,([0-9]+)) \\+([0-9]+)(|,([0-9]+)) @@(?: ?)(.*)\\n"));
-    m_unifiedHunkBodyAdded.setPattern(QStringLiteral("\\+(.*)"));
-    m_unifiedHunkBodyRemoved.setPattern(QStringLiteral("-(.*)"));
-    m_unifiedHunkBodyContext.setPattern(QStringLiteral(" (.*)"));
-    m_unifiedHunkBodyLine.setPattern(QStringLiteral("([-+ ])(.*)"));
+    m_unifiedDiffHeader1.setPattern(QRegularExpression::anchoredPattern(QStringLiteral("--- ([^\\t]+)(?:\\t([^\\t]+)(?:\\t?)(.*))?\\n")));
+    m_unifiedDiffHeader2.setPattern(QRegularExpression::anchoredPattern(QStringLiteral("\\+\\+\\+ ([^\\t]+)(?:\\t([^\\t]+)(?:\\t?)(.*))?\\n")));
+    m_unifiedHunkHeader.setPattern(QRegularExpression::anchoredPattern(QStringLiteral("@@ -([0-9]+)(|,([0-9]+)) \\+([0-9]+)(|,([0-9]+)) @@(?: ?)(.*)\\n")));
 }
 
 ParserBase::~ParserBase()
@@ -105,30 +98,29 @@ ParserBase::~ParserBase()
         m_models = nullptr; // do not delete this, i pass it around...
 }
 
-enum Kompare::Format ParserBase::determineFormat()
+Format ParserBase::determineFormat()
 {
     // Write your own format detection routine damn it :)
-    return Kompare::UnknownFormat;
+    return UnknownFormat;
 }
 
-DiffModelList* ParserBase::parse(bool* malformed)
+DiffModelList *ParserBase::parse(bool *malformed)
 {
-    DiffModelList* result;
-    switch (determineFormat())
-    {
-    case Kompare::Context :
+    DiffModelList *result;
+    switch (determineFormat()) {
+    case Context:
         result = parseContext();
         break;
-    case Kompare::Ed :
+    case Ed:
         result = parseEd();
         break;
-    case Kompare::Normal :
+    case Normal:
         result = parseNormal();
         break;
-    case Kompare::RCS :
+    case RCS:
         result = parseRCS();
         break;
-    case Kompare::Unified :
+    case Unified:
         result = parseUnified();
         break;
     default: // Unknown and SideBySide for now
@@ -146,35 +138,32 @@ DiffModelList* ParserBase::parse(bool* malformed)
 
 bool ParserBase::parseContextDiffHeader()
 {
-//     qCDebug(LIBKOMPAREDIFF2) << "ParserBase::parseContextDiffHeader()";
+//     qCDebug(KOMPAREDIFF2_LOG) << "ParserBase::parseContextDiffHeader()";
     bool result = false;
 
-    while (m_diffIterator != m_diffLines.end())
-    {
-        if (!m_contextDiffHeader1.exactMatch(*(m_diffIterator)++))
-        {
+    while (m_diffIterator != m_diffLines.end()) {
+        const auto contextDiffHeader1Match = m_contextDiffHeader1.match(*(m_diffIterator)++);
+        if (!contextDiffHeader1Match.hasMatch()) {
             continue;
         }
-//         qCDebug(LIBKOMPAREDIFF2) << "Matched length Header1 = " << m_contextDiffHeader1.matchedLength();
-//         qCDebug(LIBKOMPAREDIFF2) << "Matched string Header1 = " << m_contextDiffHeader1.cap( 0 );
-        if (m_diffIterator != m_diffLines.end() && m_contextDiffHeader2.exactMatch(*m_diffIterator))
-        {
-//             qCDebug(LIBKOMPAREDIFF2) << "Matched length Header2 = " << m_contextDiffHeader2.matchedLength();
-//             qCDebug(LIBKOMPAREDIFF2) << "Matched string Header2 = " << m_contextDiffHeader2.cap( 0 );
+//         qCDebug(KOMPAREDIFF2_LOG) << "Matched length Header1 = " << contextDiffHeader1Match.capturedLength();
+//         qCDebug(KOMPAREDIFF2_LOG) << "Matched string Header1 = " << contextDiffHeader1Match.captured( 0 );
+        const auto contextDiffHeader2Match = m_contextDiffHeader2.match(*m_diffIterator);
+        if (m_diffIterator != m_diffLines.end() && contextDiffHeader2Match.hasMatch()) {
+//             qCDebug(KOMPAREDIFF2_LOG) << "Matched length Header2 = " << contextDiffHeader2Match.capturedLength();
+//             qCDebug(KOMPAREDIFF2_LOG) << "Matched string Header2 = " << contextDiffHeader2Match.captured( 0 );
 
-            m_currentModel = new DiffModel(unescapePath(m_contextDiffHeader1.cap(1)), unescapePath(m_contextDiffHeader2.cap(1)));
-            m_currentModel->setSourceTimestamp(m_contextDiffHeader1.cap(3));
-            m_currentModel->setSourceRevision(m_contextDiffHeader1.cap(5));
-            m_currentModel->setDestinationTimestamp(m_contextDiffHeader2.cap(3));
-            m_currentModel->setDestinationRevision(m_contextDiffHeader2.cap(5));
+            m_currentModel = new DiffModel(unescapePath(contextDiffHeader1Match.captured(1)), unescapePath(contextDiffHeader2Match.captured(1)));
+            m_currentModel->setSourceTimestamp(contextDiffHeader1Match.captured(3));
+            m_currentModel->setSourceRevision(contextDiffHeader1Match.captured(5));
+            m_currentModel->setDestinationTimestamp(contextDiffHeader2Match.captured(3));
+            m_currentModel->setDestinationRevision(contextDiffHeader2Match.captured(5));
 
             ++m_diffIterator;
             result = true;
 
             break;
-        }
-        else
-        {
+        } else {
             // We're screwed, second line does not match or is not there...
             break;
         }
@@ -193,34 +182,30 @@ bool ParserBase::parseEdDiffHeader()
 
 bool ParserBase::parseNormalDiffHeader()
 {
-//     qCDebug(LIBKOMPAREDIFF2) << "ParserBase::parseNormalDiffHeader()";
+//     qCDebug(KOMPAREDIFF2_LOG) << "ParserBase::parseNormalDiffHeader()";
     bool result = false;
 
-    while (m_diffIterator != m_diffLines.end())
-    {
-        if (m_normalDiffHeader.exactMatch(*m_diffIterator))
-        {
-//             qCDebug(LIBKOMPAREDIFF2) << "Matched length Header = " << m_normalDiffHeader.matchedLength();
-//             qCDebug(LIBKOMPAREDIFF2) << "Matched string Header = " << m_normalDiffHeader.cap( 0 );
+    while (m_diffIterator != m_diffLines.end()) {
+        const auto normalDiffHeaderMatch = m_normalDiffHeader.match(*m_diffIterator);
+        if (normalDiffHeaderMatch.hasMatch()) {
+//             qCDebug(KOMPAREDIFF2_LOG) << "Matched length Header = " << normalDiffHeaderMatch.capturedLength();
+//             qCDebug(KOMPAREDIFF2_LOG) << "Matched string Header = " << normalDiffHeaderMatch.captured( 0 );
 
             m_currentModel = new DiffModel();
-            m_currentModel->setSourceFile(unescapePath(m_normalDiffHeader.cap(1)));
-            m_currentModel->setDestinationFile(unescapePath(m_normalDiffHeader.cap(2)));
+            m_currentModel->setSourceFile(unescapePath(normalDiffHeaderMatch.captured(1)));
+            m_currentModel->setDestinationFile(unescapePath(normalDiffHeaderMatch.captured(2)));
 
             result = true;
 
             ++m_diffIterator;
             break;
-        }
-        else
-        {
-            qCDebug(LIBKOMPAREDIFF2) << "No match for: " << (*m_diffIterator);
+        } else {
+            qCDebug(KOMPAREDIFF2_LOG) << "No match for: " << (*m_diffIterator);
         }
         ++m_diffIterator;
     }
 
-    if (result == false)
-    {
+    if (result == false) {
         // Set this to the first line again and hope it is a single file diff
         m_diffIterator = m_diffLines.begin();
         m_currentModel = new DiffModel();
@@ -237,34 +222,32 @@ bool ParserBase::parseRCSDiffHeader()
 
 bool ParserBase::parseUnifiedDiffHeader()
 {
-//     qCDebug(LIBKOMPAREDIFF2) << "ParserBase::parseUnifiedDiffHeader()";
+//     qCDebug(KOMPAREDIFF2_LOG) << "ParserBase::parseUnifiedDiffHeader()";
     bool result = false;
 
-    while (m_diffIterator != m_diffLines.end())   // do not assume we start with the diffheader1 line
+    while (m_diffIterator != m_diffLines.end()) // do not assume we start with the diffheader1 line
     {
-        if (!m_unifiedDiffHeader1.exactMatch(*m_diffIterator))
-        {
+        const auto unifiedDiffHeader1Match = m_unifiedDiffHeader1.match(*m_diffIterator);
+        if (!unifiedDiffHeader1Match.hasMatch()) {
             ++m_diffIterator;
             continue;
         }
-//         qCDebug(LIBKOMPAREDIFF2) << "Matched length Header1 = " << m_unifiedDiffHeader1.matchedLength();
-//         qCDebug(LIBKOMPAREDIFF2) << "Matched string Header1 = " << m_unifiedDiffHeader1.cap( 0 );
+//         qCDebug(KOMPAREDIFF2_LOG) << "Matched length Header1 = " << unifiedDiffHeader1Match.capturedLength();
+//         qCDebug(KOMPAREDIFF2_LOG) << "Matched string Header1 = " << unifiedDiffHeader1Match.captured( 0 );
         ++m_diffIterator;
-        if (m_diffIterator != m_diffLines.end() && m_unifiedDiffHeader2.exactMatch(*m_diffIterator))
-        {
-            m_currentModel = new DiffModel(unescapePath(m_unifiedDiffHeader1.cap(1)), unescapePath(m_unifiedDiffHeader2.cap(1)));
-            m_currentModel->setSourceTimestamp(m_unifiedDiffHeader1.cap(2));
-            m_currentModel->setSourceRevision(m_unifiedDiffHeader1.cap(4));
-            m_currentModel->setDestinationTimestamp(m_unifiedDiffHeader2.cap(2));
-            m_currentModel->setDestinationRevision(m_unifiedDiffHeader2.cap(4));
+        const auto unifiedDiffHeader2Match = m_unifiedDiffHeader2.match(*m_diffIterator);
+        if (m_diffIterator != m_diffLines.end() && unifiedDiffHeader2Match.hasMatch()) {
+            m_currentModel = new DiffModel(unescapePath(unifiedDiffHeader1Match.captured(1)), unescapePath(unifiedDiffHeader2Match.captured(1)));
+            m_currentModel->setSourceTimestamp(unifiedDiffHeader1Match.captured(2));
+            m_currentModel->setSourceRevision(unifiedDiffHeader1Match.captured(4));
+            m_currentModel->setDestinationTimestamp(unifiedDiffHeader2Match.captured(2));
+            m_currentModel->setDestinationRevision(unifiedDiffHeader2Match.captured(4));
 
             ++m_diffIterator;
             result = true;
 
             break;
-        }
-        else
-        {
+        } else {
             // We're screwed, second line does not match or is not there...
             break;
         }
@@ -275,12 +258,13 @@ bool ParserBase::parseUnifiedDiffHeader()
 
 bool ParserBase::parseContextHunkHeader()
 {
-//     qCDebug(LIBKOMPAREDIFF2) << "ParserBase::parseContextHunkHeader()";
+//     qCDebug(KOMPAREDIFF2_LOG) << "ParserBase::parseContextHunkHeader()";
 
     if (m_diffIterator == m_diffLines.end())
         return false;
 
-    if (!m_contextHunkHeader1.exactMatch(*(m_diffIterator)))
+    m_contextHunkHeader1Match = m_contextHunkHeader1.match(*(m_diffIterator));
+    if (!m_contextHunkHeader1Match.hasMatch())
         return false; // big fat trouble, aborting...
 
     ++m_diffIterator;
@@ -288,7 +272,8 @@ bool ParserBase::parseContextHunkHeader()
     if (m_diffIterator == m_diffLines.end())
         return false;
 
-    if (!m_contextHunkHeader2.exactMatch(*(m_diffIterator)))
+    m_contextHunkHeader2Match = m_contextHunkHeader2.match(*(m_diffIterator));
+    if (!m_contextHunkHeader2Match.hasMatch())
         return false; // big fat trouble, aborting...
 
     ++m_diffIterator;
@@ -303,23 +288,16 @@ bool ParserBase::parseEdHunkHeader()
 
 bool ParserBase::parseNormalHunkHeader()
 {
-//     qCDebug(LIBKOMPAREDIFF2) << "ParserBase::parseNormalHunkHeader()";
-    if (m_diffIterator != m_diffLines.end())
-    {
-//         qCDebug(LIBKOMPAREDIFF2) << "Header = " << *m_diffIterator;
-        if (m_normalHunkHeaderAdded.exactMatch(*m_diffIterator))
-        {
+//     qCDebug(KOMPAREDIFF2_LOG) << "ParserBase::parseNormalHunkHeader()";
+    if (m_diffIterator != m_diffLines.end()) {
+//         qCDebug(KOMPAREDIFF2_LOG) << "Header = " << *m_diffIterator;
+        if (m_normalHunkHeaderAddedMatch = m_normalHunkHeaderAdded.match(*m_diffIterator); m_normalHunkHeaderAddedMatch.hasMatch()) {
             m_normalDiffType = Difference::Insert;
-        }
-        else if (m_normalHunkHeaderRemoved.exactMatch(*m_diffIterator))
-        {
+        } else if (m_normalHunkHeaderRemovedMatch = m_normalHunkHeaderRemoved.match(*m_diffIterator); m_normalHunkHeaderRemovedMatch.hasMatch()) {
             m_normalDiffType = Difference::Delete;
-        }
-        else if (m_normalHunkHeaderChanged.exactMatch(*m_diffIterator))
-        {
+        } else if (m_normalHunkHeaderChangedMatch = m_normalHunkHeaderChanged.match(*m_diffIterator); m_normalHunkHeaderChangedMatch.hasMatch()) {
             m_normalDiffType = Difference::Change;
-        }
-        else
+        } else
             return false;
 
         ++m_diffIterator;
@@ -336,114 +314,109 @@ bool ParserBase::parseRCSHunkHeader()
 
 bool ParserBase::parseUnifiedHunkHeader()
 {
-//     qCDebug(LIBKOMPAREDIFF2) << "ParserBase::parseUnifiedHunkHeader()";
+//     qCDebug(KOMPAREDIFF2_LOG) << "ParserBase::parseUnifiedHunkHeader()";
 
-    if (m_diffIterator != m_diffLines.end() && m_unifiedHunkHeader.exactMatch(*m_diffIterator))
-    {
-        ++m_diffIterator;
-        return true;
+    if (m_diffIterator != m_diffLines.end()) {
+        m_unifiedHunkHeaderMatch = m_unifiedHunkHeader.match(*m_diffIterator);
+        if (m_unifiedHunkHeaderMatch.hasMatch()) {
+            ++m_diffIterator;
+            return true;
+        }
     }
-    else
-    {
-//         qCDebug(LIBKOMPAREDIFF2) << "This is not a unified hunk header : " << (*m_diffIterator);
-        return false;
-    }
-
+//     qCDebug(KOMPAREDIFF2_LOG) << "This is not a unified hunk header : " << (*m_diffIterator);
+    return false;
 }
 
 bool ParserBase::parseContextHunkBody()
 {
-//     qCDebug(LIBKOMPAREDIFF2) << "ParserBase::parseContextHunkBody()";
+//     qCDebug(KOMPAREDIFF2_LOG) << "ParserBase::parseContextHunkBody()";
 
     // Storing the src part of the hunk for later use
     QStringList oldLines;
-    for (; m_diffIterator != m_diffLines.end() && m_contextHunkBodyLine.exactMatch(*m_diffIterator); ++m_diffIterator) {
-//         qCDebug(LIBKOMPAREDIFF2) << "Added old line: " << *m_diffIterator;
+    for (; m_diffIterator != m_diffLines.end() && m_contextHunkBodyLine.match(*m_diffIterator).hasMatch(); ++m_diffIterator) {
+//         qCDebug(KOMPAREDIFF2_LOG) << "Added old line: " << *m_diffIterator;
         oldLines.append(*m_diffIterator);
     }
 
-    if (!m_contextHunkHeader3.exactMatch(*m_diffIterator))
+    const auto contextHunkHeader3Match = m_contextHunkHeader3.match(*m_diffIterator);
+    if (!contextHunkHeader3Match.hasMatch())
         return false;
 
     ++m_diffIterator;
 
     // Storing the dest part of the hunk for later use
     QStringList newLines;
-    for (; m_diffIterator != m_diffLines.end() && m_contextHunkBodyLine.exactMatch(*m_diffIterator); ++m_diffIterator) {
-//         qCDebug(LIBKOMPAREDIFF2) << "Added new line: " << *m_diffIterator;
+    for (; m_diffIterator != m_diffLines.end() && m_contextHunkBodyLine.match(*m_diffIterator).hasMatch(); ++m_diffIterator) {
+//         qCDebug(KOMPAREDIFF2_LOG) << "Added new line: " << *m_diffIterator;
         newLines.append(*m_diffIterator);
     }
 
-    QString function = m_contextHunkHeader1.cap(1);
-//     qCDebug(LIBKOMPAREDIFF2) << "Captured function: " << function;
-    int linenoA      = m_contextHunkHeader2.cap(1).toInt();
-//     qCDebug(LIBKOMPAREDIFF2) << "Source line number: " << linenoA;
-    int linenoB      = m_contextHunkHeader3.cap(1).toInt();
-//     qCDebug(LIBKOMPAREDIFF2) << "Dest   line number: " << linenoB;
+    QString function = m_contextHunkHeader1Match.captured(1);
+//     qCDebug(KOMPAREDIFF2_LOG) << "Captured function: " << function;
+    int linenoA = m_contextHunkHeader2Match.captured(1).toInt();
+//     qCDebug(KOMPAREDIFF2_LOG) << "Source line number: " << linenoA;
+    int linenoB = contextHunkHeader3Match.captured(1).toInt();
+//     qCDebug(KOMPAREDIFF2_LOG) << "Dest   line number: " << linenoB;
 
-    DiffHunk* hunk = new DiffHunk(linenoA, linenoB, function);
+    DiffHunk *hunk = new DiffHunk(linenoA, linenoB, function);
 
     m_currentModel->addHunk(hunk);
 
     QStringList::Iterator oldIt = oldLines.begin();
     QStringList::Iterator newIt = newLines.begin();
 
-    Difference* diff;
-    while (oldIt != oldLines.end() || newIt != newLines.end())
-    {
-        if (oldIt != oldLines.end() && m_contextHunkBodyRemoved.exactMatch(*oldIt))
-        {
-//             qCDebug(LIBKOMPAREDIFF2) << "Delete: ";
+    Difference *diff;
+    while (oldIt != oldLines.end() || newIt != newLines.end()) {
+        if (oldIt != oldLines.end() && m_contextHunkBodyRemoved.match(*oldIt).hasMatch()) {
+//             qCDebug(KOMPAREDIFF2_LOG) << "Delete: ";
             diff = new Difference(linenoA, linenoB);
             diff->setType(Difference::Delete);
             m_currentModel->addDiff(diff);
-//             qCDebug(LIBKOMPAREDIFF2) << "Difference added";
+//             qCDebug(KOMPAREDIFF2_LOG) << "Difference added";
             hunk->add(diff);
-            for (; oldIt != oldLines.end() && m_contextHunkBodyRemoved.exactMatch(*oldIt); ++oldIt)
-            {
-//                 qCDebug(LIBKOMPAREDIFF2) << " " << m_contextHunkBodyRemoved.cap( 1 );
-                diff->addSourceLine(m_contextHunkBodyRemoved.cap(1));
+            for (; oldIt != oldLines.end(); ++oldIt) {
+                const auto contextHunkBodyRemovedMatch = m_contextHunkBodyRemoved.match(*oldIt);
+                if (!contextHunkBodyRemovedMatch.hasMatch()) {
+                    break;
+                }
+//                 qCDebug(KOMPAREDIFF2_LOG) << " " << contextHunkBodyRemovedMatch.captured( 1 );
+                diff->addSourceLine(contextHunkBodyRemovedMatch.captured(1));
                 ++linenoA;
             }
-        }
-        else if (newIt != newLines.end() && m_contextHunkBodyAdded.exactMatch(*newIt))
-        {
-//             qCDebug(LIBKOMPAREDIFF2) << "Insert: ";
+        } else if (newIt != newLines.end() && m_contextHunkBodyAdded.match(*newIt).hasMatch()) {
+//             qCDebug(KOMPAREDIFF2_LOG) << "Insert: ";
             diff = new Difference(linenoA, linenoB);
             diff->setType(Difference::Insert);
             m_currentModel->addDiff(diff);
-//             qCDebug(LIBKOMPAREDIFF2) << "Difference added";
+//             qCDebug(KOMPAREDIFF2_LOG) << "Difference added";
             hunk->add(diff);
-            for (; newIt != newLines.end() && m_contextHunkBodyAdded.exactMatch(*newIt); ++newIt)
-            {
-//                 qCDebug(LIBKOMPAREDIFF2) << " " << m_contextHunkBodyAdded.cap( 1 );
-                diff->addDestinationLine(m_contextHunkBodyAdded.cap(1));
+            for (; newIt != newLines.end(); ++newIt) {
+                const auto contextHunkBodyAddedMatch = m_contextHunkBodyAdded.match(*newIt);
+                if (!contextHunkBodyAddedMatch.hasMatch()) {
+                    break;
+                }
+//                 qCDebug(KOMPAREDIFF2_LOG) << " " << contextHunkBodyAddedMatch.captured( 1 );
+                diff->addDestinationLine(contextHunkBodyAddedMatch.captured(1));
                 ++linenoB;
             }
-        }
-        else if ((oldIt == oldLines.end() || m_contextHunkBodyContext.exactMatch(*oldIt)) &&
-                 (newIt == newLines.end() || m_contextHunkBodyContext.exactMatch(*newIt)))
-        {
-//             qCDebug(LIBKOMPAREDIFF2) << "Unchanged: ";
+        } else if ((oldIt == oldLines.end() || m_contextHunkBodyContext.match(*oldIt).hasMatch())
+                   && (newIt == newLines.end() || m_contextHunkBodyContext.match(*newIt).hasMatch())) {
+//             qCDebug(KOMPAREDIFF2_LOG) << "Unchanged: ";
             diff = new Difference(linenoA, linenoB);
             // Do not add this diff with addDiff to the model... no unchanged differences allowed in there...
             diff->setType(Difference::Unchanged);
             hunk->add(diff);
-            while ((oldIt == oldLines.end() || m_contextHunkBodyContext.exactMatch(*oldIt)) &&
-                    (newIt == newLines.end() || m_contextHunkBodyContext.exactMatch(*newIt)) &&
-                    (oldIt != oldLines.end() || newIt != newLines.end()))
-            {
+            while ((oldIt == oldLines.end() || m_contextHunkBodyContext.match(*oldIt).hasMatch())
+                   && (newIt == newLines.end() || m_contextHunkBodyContext.match(*newIt).hasMatch()) && (oldIt != oldLines.end() || newIt != newLines.end())) {
                 QString l;
-                if (oldIt != oldLines.end())
-                {
-                    l = m_contextHunkBodyContext.cap(1);
-//                     qCDebug(LIBKOMPAREDIFF2) << "old: " << l;
+                if (oldIt != oldLines.end()) {
+                    l = m_contextHunkBodyContext.match(*oldIt).captured(1);
+//                     qCDebug(KOMPAREDIFF2_LOG) << "old: " << l;
                     ++oldIt;
                 }
-                if (newIt != newLines.end())
-                {
-                    l = m_contextHunkBodyContext.cap(1);
-//                     qCDebug(LIBKOMPAREDIFF2) << "new: " << l;
+                if (newIt != newLines.end()) {
+                    l = m_contextHunkBodyContext.match(*newIt).captured(1);
+//                     qCDebug(KOMPAREDIFF2_LOG) << "new: " << l;
                     ++newIt;
                 }
                 diff->addSourceLine(l);
@@ -451,32 +424,35 @@ bool ParserBase::parseContextHunkBody()
                 ++linenoA;
                 ++linenoB;
             }
-        }
-        else if ((oldIt != oldLines.end() && m_contextHunkBodyChanged.exactMatch(*oldIt)) ||
-                 (newIt != newLines.end() && m_contextHunkBodyChanged.exactMatch(*newIt)))
-        {
-//             qCDebug(LIBKOMPAREDIFF2) << "Changed: ";
+        } else if ((oldIt != oldLines.end() && m_contextHunkBodyChanged.match(*oldIt).hasMatch())
+                   || (newIt != newLines.end() && m_contextHunkBodyChanged.match(*newIt).hasMatch())) {
+//             qCDebug(KOMPAREDIFF2_LOG) << "Changed: ";
             diff = new Difference(linenoA, linenoB);
             diff->setType(Difference::Change);
             m_currentModel->addDiff(diff);
-//             qCDebug(LIBKOMPAREDIFF2) << "Difference added";
+//             qCDebug(KOMPAREDIFF2_LOG) << "Difference added";
             hunk->add(diff);
-            while (oldIt != oldLines.end() && m_contextHunkBodyChanged.exactMatch(*oldIt))
-            {
-//                 qCDebug(LIBKOMPAREDIFF2) << " " << m_contextHunkBodyChanged.cap( 1 );
-                diff->addSourceLine(m_contextHunkBodyChanged.cap(1));
+            while (oldIt != oldLines.end()) {
+                const auto contextHunkBodyChangedMatch = m_contextHunkBodyChanged.match(*oldIt);
+                if (!contextHunkBodyChangedMatch.hasMatch()) {
+                    break;
+                }
+//                 qCDebug(KOMPAREDIFF2_LOG) << " " << contextHunkBodyChangedMatch.captured( 1 );
+                diff->addSourceLine(contextHunkBodyChangedMatch.captured(1));
                 ++linenoA;
                 ++oldIt;
             }
-            while (newIt != newLines.end() && m_contextHunkBodyChanged.exactMatch(*newIt))
-            {
-//                 qCDebug(LIBKOMPAREDIFF2) << " " << m_contextHunkBodyChanged.cap( 1 );
-                diff->addDestinationLine(m_contextHunkBodyChanged.cap(1));
+            while (newIt != newLines.end()) {
+                const auto contextHunkBodyChangedMatch = m_contextHunkBodyChanged.match(*newIt);
+                if (!contextHunkBodyChangedMatch.hasMatch()) {
+                    break;
+                }
+//                 qCDebug(KOMPAREDIFF2_LOG) << " " << contextHunkBodyChangedMatch.captured( 1 );
+                diff->addDestinationLine(contextHunkBodyChangedMatch.captured(1));
                 ++linenoB;
                 ++newIt;
             }
-        }
-        else
+        } else
             return false;
         diff->determineInlineDifferences();
     }
@@ -491,59 +467,57 @@ bool ParserBase::parseEdHunkBody()
 
 bool ParserBase::parseNormalHunkBody()
 {
-//     qCDebug(LIBKOMPAREDIFF2) << "ParserBase::parseNormalHunkBody";
+//     qCDebug(KOMPAREDIFF2_LOG) << "ParserBase::parseNormalHunkBody";
 
     QString type;
 
     int linenoA = 0, linenoB = 0;
 
-    if (m_normalDiffType == Difference::Insert)
-    {
-        linenoA = m_normalHunkHeaderAdded.cap(1).toInt();
-        linenoB = m_normalHunkHeaderAdded.cap(2).toInt();
-    }
-    else if (m_normalDiffType == Difference::Delete)
-    {
-        linenoA = m_normalHunkHeaderRemoved.cap(1).toInt();
-        linenoB = m_normalHunkHeaderRemoved.cap(3).toInt();
-    }
-    else if (m_normalDiffType == Difference::Change)
-    {
-        linenoA = m_normalHunkHeaderChanged.cap(1).toInt();
-        linenoB = m_normalHunkHeaderChanged.cap(3).toInt();
+    if (m_normalDiffType == Difference::Insert) {
+        linenoA = m_normalHunkHeaderAddedMatch.captured(1).toInt();
+        linenoB = m_normalHunkHeaderAddedMatch.captured(2).toInt();
+    } else if (m_normalDiffType == Difference::Delete) {
+        linenoA = m_normalHunkHeaderRemovedMatch.captured(1).toInt();
+        linenoB = m_normalHunkHeaderRemovedMatch.captured(3).toInt();
+    } else if (m_normalDiffType == Difference::Change) {
+        linenoA = m_normalHunkHeaderChangedMatch.captured(1).toInt();
+        linenoB = m_normalHunkHeaderChangedMatch.captured(3).toInt();
     }
 
-    DiffHunk* hunk = new DiffHunk(linenoA, linenoB);
+    DiffHunk *hunk = new DiffHunk(linenoA, linenoB);
     m_currentModel->addHunk(hunk);
-    Difference* diff = new Difference(linenoA, linenoB);
+    Difference *diff = new Difference(linenoA, linenoB);
     hunk->add(diff);
     m_currentModel->addDiff(diff);
 
     diff->setType(m_normalDiffType);
 
     if (m_normalDiffType == Difference::Change || m_normalDiffType == Difference::Delete)
-        for (; m_diffIterator != m_diffLines.end() && m_normalHunkBodyRemoved.exactMatch(*m_diffIterator); ++m_diffIterator)
-        {
-//             qCDebug(LIBKOMPAREDIFF2) << "Line = " << *m_diffIterator;
-            diff->addSourceLine(m_normalHunkBodyRemoved.cap(1));
+        for (; m_diffIterator != m_diffLines.end(); ++m_diffIterator) {
+            const auto normalHunkBodyRemovedMatch = m_normalHunkBodyRemoved.match(*m_diffIterator);
+            if (!normalHunkBodyRemovedMatch.hasMatch()) {
+                break;
+            }
+//             qCDebug(KOMPAREDIFF2_LOG) << "Line = " << *m_diffIterator;
+            diff->addSourceLine(normalHunkBodyRemovedMatch.captured(1));
         }
 
-    if (m_normalDiffType == Difference::Change)
-    {
-        if (m_diffIterator != m_diffLines.end() && m_normalHunkBodyDivider.exactMatch(*m_diffIterator))
-        {
-//             qCDebug(LIBKOMPAREDIFF2) << "Line = " << *m_diffIterator;
+    if (m_normalDiffType == Difference::Change) {
+        if (m_diffIterator != m_diffLines.end() && m_normalHunkBodyDivider.match(*m_diffIterator).hasMatch()) {
+//             qCDebug(KOMPAREDIFF2_LOG) << "Line = " << *m_diffIterator;
             ++m_diffIterator;
-        }
-        else
+        } else
             return false;
     }
 
     if (m_normalDiffType == Difference::Insert || m_normalDiffType == Difference::Change)
-        for (; m_diffIterator != m_diffLines.end() && m_normalHunkBodyAdded.exactMatch(*m_diffIterator); ++m_diffIterator)
-        {
-//             qCDebug(LIBKOMPAREDIFF2) << "Line = " << *m_diffIterator;
-            diff->addDestinationLine(m_normalHunkBodyAdded.cap(1));
+        for (; m_diffIterator != m_diffLines.end(); ++m_diffIterator) {
+            const auto normalHunkBodyAddedMatch = m_normalHunkBodyAdded.match(*m_diffIterator);
+            if (!normalHunkBodyAddedMatch.hasMatch()) {
+                break;
+            }
+//             qCDebug(KOMPAREDIFF2_LOG) << "Line = " << *m_diffIterator;
+            diff->addDestinationLine(normalHunkBodyAddedMatch.captured(1));
         }
 
     return true;
@@ -554,7 +528,7 @@ bool ParserBase::parseRCSHunkBody()
     return false;
 }
 
-bool ParserBase::matchesUnifiedHunkLine(const QString& line) const
+bool ParserBase::matchesUnifiedHunkLine(const QString &line) const
 {
     static const QChar context = QLatin1Char(' ');
     static const QChar added = QLatin1Char('+');
@@ -567,17 +541,16 @@ bool ParserBase::matchesUnifiedHunkLine(const QString& line) const
 
 bool ParserBase::parseUnifiedHunkBody()
 {
-//     qCDebug(LIBKOMPAREDIFF2) << "ParserBase::parseUnifiedHunkBody";
+//     qCDebug(KOMPAREDIFF2_LOG) << "ParserBase::parseUnifiedHunkBody";
 
     int linenoA = 0, linenoB = 0;
     bool wasNum;
 
     // Fetching the stuff we need from the hunkheader regexp that was parsed in parseUnifiedHunkHeader();
-    linenoA = m_unifiedHunkHeader.cap(1).toInt();
+    linenoA = m_unifiedHunkHeaderMatch.captured(1).toInt();
     int lineCountA = 1, lineCountB = 1; // an omitted line count in the header implies a line count of 1
-    if (!m_unifiedHunkHeader.cap(3).isEmpty())
-    {
-        lineCountA = m_unifiedHunkHeader.cap(3).toInt(&wasNum);
+    if (!m_unifiedHunkHeaderMatch.captured(3).isEmpty()) {
+        lineCountA = m_unifiedHunkHeaderMatch.captured(3).toInt(&wasNum);
         if (!wasNum)
             return false;
 
@@ -586,35 +559,32 @@ bool ParserBase::parseUnifiedHunkBody()
         if (lineCountA == 0)
             ++linenoA;
     }
-    linenoB = m_unifiedHunkHeader.cap(4).toInt();
-    if (!m_unifiedHunkHeader.cap(6).isEmpty()) {
-        lineCountB = m_unifiedHunkHeader.cap(6).toInt(&wasNum);
+    linenoB = m_unifiedHunkHeaderMatch.captured(4).toInt();
+    if (!m_unifiedHunkHeaderMatch.captured(6).isEmpty()) {
+        lineCountB = m_unifiedHunkHeaderMatch.captured(6).toInt(&wasNum);
         if (!wasNum)
             return false;
 
         if (lineCountB == 0) // see above
             ++linenoB;
     }
-    QString function = m_unifiedHunkHeader.cap(7);
+    QString function = m_unifiedHunkHeaderMatch.captured(7);
 
-    DiffHunk* hunk = new DiffHunk(linenoA, linenoB, function);
+    DiffHunk *hunk = new DiffHunk(linenoA, linenoB, function);
     m_currentModel->addHunk(hunk);
 
     const QStringList::ConstIterator m_diffLinesEnd = m_diffLines.end();
 
     const QString context = QStringLiteral(" ");
-    const QString added   = QStringLiteral("+");
+    const QString added = QStringLiteral("+");
     const QString removed = QStringLiteral("-");
 
-    while (m_diffIterator != m_diffLinesEnd && matchesUnifiedHunkLine(*m_diffIterator) && (lineCountA || lineCountB))
-    {
-        Difference* diff = new Difference(linenoA, linenoB);
+    while (m_diffIterator != m_diffLinesEnd && matchesUnifiedHunkLine(*m_diffIterator) && (lineCountA || lineCountB)) {
+        Difference *diff = new Difference(linenoA, linenoB);
         hunk->add(diff);
 
-        if ((*m_diffIterator).startsWith(context))
-        {   // context
-            for (; m_diffIterator != m_diffLinesEnd && (*m_diffIterator).startsWith(context) && (lineCountA || lineCountB); ++m_diffIterator)
-            {
+        if ((*m_diffIterator).startsWith(context)) { // context
+            for (; m_diffIterator != m_diffLinesEnd && (*m_diffIterator).startsWith(context) && (lineCountA || lineCountB); ++m_diffIterator) {
                 diff->addSourceLine(QString(*m_diffIterator).remove(0, 1));
                 diff->addDestinationLine(QString(*m_diffIterator).remove(0, 1));
                 ++linenoA;
@@ -622,35 +592,26 @@ bool ParserBase::parseUnifiedHunkBody()
                 --lineCountA;
                 --lineCountB;
             }
-        }
-        else
-        {   // This is a real difference, not context
-            for (; m_diffIterator != m_diffLinesEnd && (*m_diffIterator).startsWith(removed) && (lineCountA || lineCountB); ++m_diffIterator)
-            {
+        } else { // This is a real difference, not context
+            for (; m_diffIterator != m_diffLinesEnd && (*m_diffIterator).startsWith(removed) && (lineCountA || lineCountB); ++m_diffIterator) {
                 diff->addSourceLine(QString(*m_diffIterator).remove(0, 1));
                 ++linenoA;
                 --lineCountA;
             }
-            for (; m_diffIterator != m_diffLinesEnd && (*m_diffIterator).startsWith(added) && (lineCountA || lineCountB); ++m_diffIterator)
-            {
+            for (; m_diffIterator != m_diffLinesEnd && (*m_diffIterator).startsWith(added) && (lineCountA || lineCountB); ++m_diffIterator) {
                 diff->addDestinationLine(QString(*m_diffIterator).remove(0, 1));
                 ++linenoB;
                 --lineCountB;
             }
-            if (diff->sourceLineCount() == 0)
-            {
+            if (diff->sourceLineCount() == 0) {
                 diff->setType(Difference::Insert);
-//                 qCDebug(LIBKOMPAREDIFF2) << "Insert difference";
-            }
-            else if (diff->destinationLineCount() == 0)
-            {
+//                 qCDebug(KOMPAREDIFF2_LOG) << "Insert difference";
+            } else if (diff->destinationLineCount() == 0) {
                 diff->setType(Difference::Delete);
-//                 qCDebug(LIBKOMPAREDIFF2) << "Delete difference";
-            }
-            else
-            {
+//                 qCDebug(KOMPAREDIFF2_LOG) << "Delete difference";
+            } else {
                 diff->setType(Difference::Change);
-//                 qCDebug(LIBKOMPAREDIFF2) << "Change difference";
+//                 qCDebug(KOMPAREDIFF2_LOG) << "Change difference";
             }
             diff->determineInlineDifferences();
             m_currentModel->addDiff(diff);
@@ -660,20 +621,21 @@ bool ParserBase::parseUnifiedHunkBody()
     return true;
 }
 
-void ParserBase::checkHeader(const QRegExp& header)
+void ParserBase::checkHeader(const QRegularExpression &header)
 {
-    if (m_diffIterator != m_diffLines.end()
-            && !header.exactMatch(*m_diffIterator)
-            && !m_diffIterator->startsWith(QLatin1String("Index: ")) /* SVN diff */
-            && !m_diffIterator->startsWith(QLatin1String("diff ")) /* concatenated diff */
-            && !m_diffIterator->startsWith(QLatin1String("-- ")) /* git format-patch */)
+    // clang-format off
+    if (m_diffIterator != m_diffLines.end() &&
+        !header.match(*m_diffIterator).hasMatch() &&
+        !m_diffIterator->startsWith(QLatin1String("Index: ")) && /* SVN diff */
+        !m_diffIterator->startsWith(QLatin1String("diff ")) && /* concatenated diff */
+        !m_diffIterator->startsWith(QLatin1String("-- ")) /* git format-patch */)
+    // clang-format on
         m_malformed = true;
 }
 
-DiffModelList* ParserBase::parseContext()
+DiffModelList *ParserBase::parseContext()
 {
-    while (parseContextDiffHeader())
-    {
+    while (parseContextDiffHeader()) {
         while (parseContextHunkHeader())
             parseContextHunkBody();
         if (m_currentModel->differenceCount() > 0)
@@ -683,21 +645,17 @@ DiffModelList* ParserBase::parseContext()
 
     m_models->sort();
 
-    if (m_models->count() > 0)
-    {
+    if (m_models->count() > 0) {
         return m_models;
-    }
-    else
-    {
+    } else {
         delete m_models;
         return nullptr;
     }
 }
 
-DiffModelList* ParserBase::parseEd()
+DiffModelList *ParserBase::parseEd()
 {
-    while (parseEdDiffHeader())
-    {
+    while (parseEdDiffHeader()) {
         while (parseEdHunkHeader())
             parseEdHunkBody();
         if (m_currentModel->differenceCount() > 0)
@@ -706,21 +664,17 @@ DiffModelList* ParserBase::parseEd()
 
     m_models->sort();
 
-    if (m_models->count() > 0)
-    {
+    if (m_models->count() > 0) {
         return m_models;
-    }
-    else
-    {
+    } else {
         delete m_models;
         return nullptr;
     }
 }
 
-DiffModelList* ParserBase::parseNormal()
+DiffModelList *ParserBase::parseNormal()
 {
-    while (parseNormalDiffHeader())
-    {
+    while (parseNormalDiffHeader()) {
         while (parseNormalHunkHeader())
             parseNormalHunkBody();
         if (m_currentModel->differenceCount() > 0)
@@ -728,8 +682,7 @@ DiffModelList* ParserBase::parseNormal()
         checkHeader(m_normalDiffHeader);
     }
 
-    if (m_singleFileDiff)
-    {
+    if (m_singleFileDiff) {
         while (parseNormalHunkHeader())
             parseNormalHunkBody();
         if (m_currentModel->differenceCount() > 0)
@@ -740,21 +693,17 @@ DiffModelList* ParserBase::parseNormal()
 
     m_models->sort();
 
-    if (m_models->count() > 0)
-    {
+    if (m_models->count() > 0) {
         return m_models;
-    }
-    else
-    {
+    } else {
         delete m_models;
         return nullptr;
     }
 }
 
-DiffModelList* ParserBase::parseRCS()
+DiffModelList *ParserBase::parseRCS()
 {
-    while (parseRCSDiffHeader())
-    {
+    while (parseRCSDiffHeader()) {
         while (parseRCSHunkHeader())
             parseRCSHunkBody();
         if (m_currentModel->differenceCount() > 0)
@@ -763,25 +712,21 @@ DiffModelList* ParserBase::parseRCS()
 
     m_models->sort();
 
-    if (m_models->count() > 0)
-    {
+    if (m_models->count() > 0) {
         return m_models;
-    }
-    else
-    {
+    } else {
         delete m_models;
         return nullptr;
     }
 }
 
-DiffModelList* ParserBase::parseUnified()
+DiffModelList *ParserBase::parseUnified()
 {
-    while (parseUnifiedDiffHeader())
-    {
+    while (parseUnifiedDiffHeader()) {
         while (parseUnifiedHunkHeader())
             parseUnifiedHunkBody();
-//         qCDebug(LIBKOMPAREDIFF2) << "New model ready to be analyzed...";
-//         qCDebug(LIBKOMPAREDIFF2) << " differenceCount() == " << m_currentModel->differenceCount();
+//         qCDebug(KOMPAREDIFF2_LOG) << "New model ready to be analyzed...";
+//         qCDebug(KOMPAREDIFF2_LOG) << " differenceCount() == " << m_currentModel->differenceCount();
         if (m_currentModel->differenceCount() > 0)
             m_models->append(m_currentModel);
         checkHeader(m_unifiedDiffHeader1);
@@ -789,14 +734,10 @@ DiffModelList* ParserBase::parseUnified()
 
     m_models->sort();
 
-    if (m_models->count() > 0)
-    {
+    if (m_models->count() > 0) {
         return m_models;
-    }
-    else
-    {
+    } else {
         delete m_models;
         return nullptr;
     }
 }
-

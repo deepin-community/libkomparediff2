@@ -1,57 +1,67 @@
 /*
-SPDX-FileCopyrightText: 2001-2003 Otto Bruggeman <otto.bruggeman@home.nl>
-SPDX-FileCopyrightText: 2001-2003 John Firebaugh <jfirebaugh@kde.org>
+    SPDX-FileCopyrightText: 2001-2003 Otto Bruggeman <otto.bruggeman@home.nl>
+    SPDX-FileCopyrightText: 2001-2003 John Firebaugh <jfirebaugh@kde.org>
 
-SPDX-License-Identifier: GPL-2.0-or-later
+    SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-#ifndef DIFFSETTINGS_H
-#define DIFFSETTINGS_H
+#ifndef KOMPAREDIFF2_DIFFSETTINGS_H
+#define KOMPAREDIFF2_DIFFSETTINGS_H
 
+// lib
+#include "global.h"
+#include "komparediff2_export.h"
+// Qt
 #include <QStringList>
 
-#include "kompare.h"
-#include "settingsbase.h"
-#include "diff2_export.h"
+class KConfig;
+
+namespace KompareDiff2
+{
 
 /**
+ * @class DiffSettings diffsettings.h <KompareDiff2/DiffSettings>
+ *
  * The settings for a diff.
  */
-class DIFF2_EXPORT  DiffSettings : public SettingsBase
+class KOMPAREDIFF2_EXPORT DiffSettings
 {
-    Q_OBJECT
 public:
-    explicit DiffSettings(QWidget* parent);
-    ~DiffSettings() override;
+    DiffSettings();
+    ~DiffSettings();
+
 public:
-    // some virtual functions that will be overloaded from the base class
-    void loadSettings(KConfig* config) override;
-    void saveSettings(KConfig* config) override;
+    void loadSettings(KConfig *config);
+    void saveSettings(KConfig *config);
 
 public:
     QString m_diffProgram;
     int m_linesOfContext;
-    Kompare::Format m_format;
-    bool m_largeFiles;                           // -H
-    bool m_ignoreWhiteSpace;                     // -b
-    bool m_ignoreAllWhiteSpace;                  // -w
-    bool m_ignoreEmptyLines;                     // -B
-    bool m_ignoreChangesDueToTabExpansion;       // -E
-    bool m_createSmallerDiff;                    // -d
-    bool m_ignoreChangesInCase;                  // -i
-    bool m_showCFunctionChange;                  // -p
-    bool m_convertTabsToSpaces;                  // -t
-    bool m_ignoreRegExp;                         // -I
-    QString m_ignoreRegExpText;                  // the RE for -I
+    Format m_format;
+    // clang-format off
+    bool m_largeFiles;                         ///< -H
+    bool m_ignoreWhiteSpace;                   ///< -b
+    bool m_ignoreAllWhiteSpace;                ///< -w
+    bool m_ignoreEmptyLines;                   ///< -B
+    bool m_ignoreChangesDueToTabExpansion;     ///< -E
+    bool m_createSmallerDiff;                  ///< -d
+    bool m_ignoreChangesInCase;                ///< -i
+    bool m_showCFunctionChange;                ///< -p
+    bool m_convertTabsToSpaces;                ///< -t
+    bool m_ignoreRegExp;                       ///< -I
+    QString m_ignoreRegExpText;                ///< the RE for -I
     QStringList m_ignoreRegExpTextHistory;
-    bool m_recursive;                            // -r
-    bool m_newFiles;                             // -N
-//  bool m_allText;                              // -a
-    bool m_excludeFilePattern;                   // -x
-    QStringList m_excludeFilePatternList;        // The list of patterns for -x
-    bool m_excludeFilesFile;                     // -X
-    QString m_excludeFilesFileURL;               // The filename to -X
-    QStringList m_excludeFilesFileHistoryList;   // The history list of filenames
+    bool m_recursive;                          ///< -r
+    bool m_newFiles;                           ///< -N
+//  bool m_allText;                            ///< -a
+    bool m_excludeFilePattern;                 ///< -x
+    QStringList m_excludeFilePatternList;      ///< The list of patterns for -x
+    bool m_excludeFilesFile;                   ///< -X
+    QString m_excludeFilesFileURL;             ///< The filename to -X
+    QStringList m_excludeFilesFileHistoryList; ///< The history list of filenames
+    // clang-format on
 };
+
+}
 
 #endif

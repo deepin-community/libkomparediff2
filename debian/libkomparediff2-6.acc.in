@@ -6,7 +6,7 @@
 </version>
 
 <headers>
-    /usr/include/libkomparediff2
+    /usr/include/KompareDiff2
 </headers>
 
 <libs>
@@ -15,7 +15,7 @@
 
 <gcc_options>
     -fPIC
-    -std=c++11
+    -std=c++17
 </gcc_options>
 
 </descriptor>

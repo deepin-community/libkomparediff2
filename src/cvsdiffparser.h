@@ -1,27 +1,28 @@
 /*
-SPDX-FileCopyrightText: 2002-2004 Otto Bruggeman <otto.bruggeman@home.nl>
+    SPDX-FileCopyrightText: 2002-2004 Otto Bruggeman <otto.bruggeman@home.nl>
 
-SPDX-License-Identifier: GPL-2.0-or-later
+    SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-#ifndef CVSDIFF_PARSER_H
-#define CVSDIFF_PARSER_H
+#ifndef KOMPAREDIFF2_CVSDIFFPARSER_H
+#define KOMPAREDIFF2_CVSDIFFPARSER_H
 
+// lib
 #include "parserbase.h"
 
-namespace Diff2
+namespace KompareDiff2
 {
 
-class KompareModelList;
+class ModelList;
 
 class CVSDiffParser : public ParserBase
 {
 public:
-    CVSDiffParser(const KompareModelList* list, const QStringList& diff);
+    CVSDiffParser(const ModelList *list, const QStringList &diff);
     ~CVSDiffParser() override;
 
 protected:
-    enum Kompare::Format determineFormat() override;
+    Format determineFormat() override;
 
 protected:
 //     virtual bool parseContextDiffHeader();
@@ -43,6 +44,6 @@ protected:
 //     virtual bool parseUnifiedHunkBody();
 };
 
-} // End of namespace Diff2
+} // End of namespace KompareDiff2
 
 #endif
